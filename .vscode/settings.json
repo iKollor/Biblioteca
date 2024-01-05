@@ -1,0 +1,24 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": {
+        "include": ["lib/**/*.jar", "c:\\Users\\isai_\\Downloads\\mysql-connector-j-8.2.0.jar"],
+        "exclude": ["lib/mysql-connector-j-8.2.0.jar"]
+    },
+    "cSpell.words": ["anio", "boton", "Metodos", "proyectopoo", "transaccion"],
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "proyectoPOO",
+            "database": "proyectopoo",
+            "username": "root"
+        }
+    ]
+}
