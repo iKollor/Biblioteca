@@ -1,12 +1,17 @@
-package model;
+package model.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Autor;
+import model.Estudiante;
+import model.Libro;
+import model.Usuario;
 import model.interfaces.Estado;
 
 public class MetodosDAO {
@@ -26,7 +31,7 @@ public class MetodosDAO {
   private static final String COL_AUTOR_NOMBRE = "nombre";
   private static final String COL_AUTOR_NACIONALIDAD = "nacionalidad";
 
-  public boolean Register(Usuario user) {
+  public boolean Register(Usuario user) throws Exception {
 
     try (Connection cn = Conexion.Conectar();
         PreparedStatement pst = cn.prepareStatement(
@@ -35,18 +40,18 @@ public class MetodosDAO {
       pst.setString(1, user.getNombre());
       pst.setString(2, user.getApellido());
       pst.setString(3, user.getEmail());
-      //TODO: Usar un hash para la contraseña
+      // TODO: Encriptar la contraseña
       pst.setString(4, new String(user.getPassword()));
       pst.setString(5, user.getDni());
       pst.execute();
       return true;
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
+      throw e; // Propagar la SQLException
     }
-    return false;
   }
 
-  public Usuario authLogin(String email, String password) {
+  public Usuario authLogin(String email, String password) throws Exception {
 
     try (Connection cn = Conexion.Conectar();
         PreparedStatement pst = cn
@@ -63,13 +68,14 @@ public class MetodosDAO {
         user.setDni(rs.getString("dni"));
         return user;
       }
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
+      throw e; // Propagar la SQLException
     }
     return null;
   }
 
-  public List<Libro> buscarLibros() {
+  public List<Libro> getLibros() throws Exception {
     List<Libro> libros = new ArrayList<>();
     String sql = "SELECT l.*, a.nombre AS autor_nombre, a.nacionalidad FROM libros l JOIN autores a ON l.autor_id = a.id";
 
@@ -93,13 +99,14 @@ public class MetodosDAO {
 
         libros.add(libro);
       }
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
+      throw e; // Propagar la SQLException
     }
     return libros;
   }
 
-  public Autor getAutor(int id) {
+  public Autor getAutor(int id) throws Exception {
     String sql = "SELECT * FROM autores WHERE id = ?";
     try (Connection cn = Conexion.Conectar();
         PreparedStatement pst = cn.prepareStatement(sql)) {
@@ -118,13 +125,14 @@ public class MetodosDAO {
           return autor;
         }
       }
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
+      throw e; // Propagar la SQLException
     }
     return null;
   }
 
-  public List<Libro> getLibrosEscritos(Autor autor) {
+  public List<Libro> getLibrosEscritos(Autor autor) throws Exception {
     String sql = "SELECT * FROM libros WHERE autor_id = ?";
     List<Libro> libros = new ArrayList<>();
     try (Connection cn = Conexion.Conectar();
@@ -143,8 +151,9 @@ public class MetodosDAO {
           libros.add(libro);
         }
       }
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
+      throw e; // Propagar la SQLException
     }
     return libros;
   }

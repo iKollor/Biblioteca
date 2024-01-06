@@ -1,83 +1,132 @@
 package controller;
 
+import java.util.List;
+
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import model.Estudiante;
-import model.MetodosDAO;
 import model.Usuario;
+import model.db.MetodosDAO;
+import view.HomeView;
 import view.LoginView;
 import view.RegistroView;
+import view.panels.Catalog;
+import model.Libro;
 
 public class AppController {
 
+  public enum ViewType {
+    LOGIN, REGISTER, HOME
+  }
+
+  public enum Panel {
+    CATALOGO, PRESTAMOS, USUARIOS, ADD_LIBRO, ADD_AUTOR
+  }
+
+  // Vistas
   private LoginView loginView;
   private RegistroView registerView;
-  private MetodosDAO dao; // DAO: Data Access Object
-  private ValidateForm validate;
+  private HomeView homeView;
+  // Paneles
+  private Catalog catalogoView;
 
+  // Modelos
+  private MetodosDAO dao; // DAO: Data Access Object
+
+  private ValidateForm validate = new ValidateForm(); // Validador de formularios
+  private Usuario user = null; // Usuario actual
+
+  private Panel currentPanel = null;
+  private ViewType currentView = null;
+
+  LoginController loginController = null;
+  RegisterController registerController = null;
+
+  // Constructor
   public AppController(MetodosDAO dao) {
     this.dao = dao;
-    this.validate = new ValidateForm();
   }
 
-  public void setLoginView(LoginView loginView) {
-    this.loginView = loginView;
-    // TODO: Configurar listeners para los elementos de loginView aquí
+  public ValidateForm getValidate() {
+    return validate;
   }
 
-  public void setRegisterView(RegistroView registerView) {
-    this.registerView = registerView;
-    // TODO: Configurar listeners para los elementos de registerView aquí
+  public MetodosDAO getDao() {
+    return dao;
   }
 
-  public void showRegisterView() {
-    loginView.setVisible(false);
-    registerView.setVisible(true);
-  }
-
-  public void showLoginView() {
-    registerView.setVisible(false);
-    loginView.setVisible(true);
-  }
-
-  public void onLogin() {
-    String usuario = loginView.getUsuario();
-    char[] password = loginView.getPassword();
-
-    if (validate.validateLoginForm(usuario, password)) {
-      Usuario user = dao.authLogin(usuario, new String(password));
-      if (user != null) {
-        JOptionPane.showMessageDialog(null, "Bienvenido " + user.getNombre());
-      } else {
-        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
-      }
-    } else {
-      JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos, revise los campos");
+  public void showView(ViewType viewType) {
+    // Mostrar la vista actual
+    switch (viewType) {
+      case LOGIN:
+        loginView = new LoginView();
+        loginController = new LoginController(loginView, this);
+        loginView.setVisible(true);
+        break;
+      case REGISTER:
+        registerView = new RegistroView();
+        registerController = new RegisterController(registerView, this);
+        registerView.setVisible(true);
+        break;
+      case HOME:
+        homeView = new HomeView(this);
+        homeView.setUser(user); // Establecer el usuario en HomeView
+        homeView.setVisible(true);
+        break;
     }
+
+    // Cerrar las vistas anteriores
+    if (currentView != null && currentView != viewType) {
+      switch (currentView) {
+        case LOGIN:
+          loginView.dispose();
+          break;
+        case REGISTER:
+          if (registerView != null)
+            registerView.dispose();
+          break;
+        case HOME:
+          if (homeView != null)
+            homeView.dispose();
+          break;
+      }
+    }
+    currentView = viewType;
+  }
+
+  private void showPanel(Panel panel) {
+    switch (panel) {
+      case CATALOGO:
+        if (catalogoView == null) {
+          Catalog catalogoView = new Catalog(getLibros());
+          homeView.addPanel(catalogoView, "CATALOGO");
+        }
+        homeView.switchPanel("CATALOGO");
+        break;
+      // TODO: Agregar casos para otros paneles
+      default:
+        throw new IllegalArgumentException("Panel no encontrado");
+    }
+    currentPanel = panel;
+  }
+
+  public void showCatalogoView() {
+    showPanel(Panel.CATALOGO);
   }
 
   public void onLogout() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'onLogout'");
+    homeView.setUser(null);
+    user = null;
+    showView(ViewType.LOGIN);
   }
 
-  public void onRegister() {
-    Usuario user = new Estudiante();
-    user.setNombre(registerView.getNombre());
-    user.setApellido(registerView.getApellido());
-    user.setDni(registerView.getDNI());
-    user.setEmail(registerView.getEmail());
-    user.setPassword(registerView.getPassword());
-
-    if (validate.validateRegisterForm(user)) {
-      if (dao.Register(user)) {
-        JOptionPane.showMessageDialog(null, "Usuario registrado correctamente");
-        showLoginView();
-      } else {
-        JOptionPane.showMessageDialog(null, "Error al registrar usuario");
-      }
-    } else {
-      JOptionPane.showMessageDialog(null, "Error al registrar usuario, la información no es válida");
+  public List<Libro> getLibros() {
+    try {
+      return dao.getLibros();
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error al obtener libros: " + e.getMessage(), "Error",
+          JOptionPane.ERROR_MESSAGE);
+      return null;
     }
   }
 }

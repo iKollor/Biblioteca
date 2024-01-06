@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -16,19 +15,51 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import controller.AppController;
-import view.fonts.SFProFont;
+import view.utils.fonts.SFProFont;
 
 public class LoginView extends JFrame {
 
-  public JLabel lblTitulo;
+  public JLabel lblRegister, lblTitulo;
+
+  // Estos van a tener eventos asociados, asi que creamos los métodos de acceso
   public JTextField txtUser;
   public JPasswordField txtPassword;
   public JButton btnLogin;
-  public JLabel lblRegister;
   public JLabel lblRegisterLink;
 
-  public LoginView(AppController controller) {
+  public JTextField getTxtUser() {
+    return txtUser;
+  }
+
+  public void setTxtUser(JTextField txtUser) {
+    this.txtUser = txtUser;
+  }
+
+  public JPasswordField getTxtPassword() {
+    return txtPassword;
+  }
+
+  public void setTxtPassword(JPasswordField txtPassword) {
+    this.txtPassword = txtPassword;
+  }
+
+  public JButton getBtnLogin() {
+    return btnLogin;
+  }
+
+  public void setBtnLogin(JButton btnLogin) {
+    this.btnLogin = btnLogin;
+  }
+
+  public JLabel getLblRegisterLink() {
+    return lblRegisterLink;
+  }
+
+  public void setLblRegisterLink(JLabel lblRegisterLink) {
+    this.lblRegisterLink = lblRegisterLink;
+  }
+
+  public LoginView() {
     // Configuración del JFrame
     setTitle("Sistema de Gestión de Biblioteca");
     setSize(800, 600);
@@ -39,8 +70,6 @@ public class LoginView extends JFrame {
 
     initComponents(); // Se inicializan los componentes
     addComponents(); // Se agregan los componentes al JFrame
-    initEvents(controller); // Se inicializan los eventos de los componentes
-    clearForm(); // Se limpia el formulario
   }
 
   // Se separa la inicialización de los componentes de su agregación al panel para
@@ -58,14 +87,6 @@ public class LoginView extends JFrame {
 
     // Botón de login
     btnLogin = new JButton("Login");
-    // TODO: Agregar funcionalidad al botón
-    btnLogin.addActionListener(e -> {
-      String usuario = txtUser.getText();
-      char[] password = txtPassword.getPassword();
-      System.out.println("Login");
-      System.out.println("Usuario: " + usuario);
-      System.out.println("Contraseña: " + String.valueOf(password));
-    });
 
     // Label para el link de registro
     lblRegister = new JLabel("¿No tienes cuenta?", SwingConstants.CENTER);
@@ -100,32 +121,4 @@ public class LoginView extends JFrame {
     add(panel);
   }
 
-  public void clearForm() {
-    txtUser.setText("");
-    txtPassword.setText("");
-  }
-
-  public String getUsuario() {
-    return txtUser.getText();
-  }
-
-  public char[] getPassword() {
-    return txtPassword.getPassword();
-  }
-
-  public void setLoginAction(Runnable loginAction) {
-    btnLogin.addActionListener(e -> loginAction.run());
-  }
-
-  public void initEvents(AppController controller) {
-    btnLogin.addActionListener(e -> controller.onLogin()); // Agregar evento al botón de login
-
-    lblRegisterLink.addMouseListener(new MouseAdapter() { // Agregar evento al link de registro
-      @Override
-      public void mouseClicked(java.awt.event.MouseEvent e) {
-        controller.showRegisterView();
-      }
-    });
-
-  }
 }

@@ -13,12 +13,12 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import controller.AppController;
-import view.fonts.SFProFont;
+import view.utils.fonts.SFProFont;
 
 public class RegistroView extends JFrame {
 
   public JLabel lblTitulo;
+
   public JTextField txtNombre;
   public JTextField txtApellido;
   public JTextField txtDNI;
@@ -28,7 +28,39 @@ public class RegistroView extends JFrame {
   public JButton btnRegistrar;
   public JButton back;
 
-  public RegistroView(AppController controller) {
+  public JTextField getTxtNombre() {
+    return txtNombre;
+  }
+
+  public JTextField getTxtApellido() {
+    return txtApellido;
+  }
+
+  public JTextField getTxtDNI() {
+    return txtDNI;
+  }
+
+  public JTextField getTxtEmail() {
+    return txtEmail;
+  }
+
+  public JPasswordField getTxtPassword() {
+    return txtPassword;
+  }
+
+  public JPasswordField getTxtConfirmPassword() {
+    return txtConfirmPassword;
+  }
+
+  public JButton getBtnRegistrar() {
+    return btnRegistrar;
+  }
+
+  public JButton getBack() {
+    return back;
+  }
+
+  public RegistroView() {
 
     setTitle("Sistema de Gestión de Biblioteca");
     setSize(500, 700);
@@ -39,8 +71,6 @@ public class RegistroView extends JFrame {
 
     initComponents(); // Se inicializan los componentes
     addComponents(); // Se agregan los componentes al JFrame
-    initEvents(controller); // Se inicializan los eventos de los componentes
-    clearForm(); // Se limpia el formulario
   }
 
   public void initComponents() {
@@ -106,43 +136,5 @@ public class RegistroView extends JFrame {
     add(back).setBounds(8, 8, 60, 30);
 
     add(mainPanel, BorderLayout.CENTER);
-  }
-
-  public void clearForm() {
-    txtNombre.setText("");
-    txtApellido.setText("");
-    txtDNI.setText("");
-    txtEmail.setText("");
-    txtPassword.setText("");
-    txtConfirmPassword.setText("");
-  }
-
-  public String getNombre() {
-    return txtNombre.getText();
-  }
-
-  public String getApellido() {
-    return txtApellido.getText();
-  }
-
-  public String getDNI() {
-    return txtDNI.getText();
-  }
-
-  public String getEmail() {
-    return txtEmail.getText();
-  }
-
-  public char[] getPassword() {
-    return txtPassword.getPassword();
-  }
-
-  public char[] getConfirmPassword() {
-    return txtConfirmPassword.getPassword();
-  }
-
-  public void initEvents(AppController controller) {
-    btnRegistrar.addActionListener(e -> controller.onRegister());
-    back.addActionListener(e -> controller.showLoginView());
   }
 }
