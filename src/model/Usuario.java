@@ -3,8 +3,9 @@ package model;
 import java.util.List;
 
 public abstract class Usuario {
-  public static final int MAX_LIBROS_PRESTADOS = 4;
+  public final int MAX_LIBROS_PRESTADOS = 4;
 
+  private int id;
   private String nombre;
   private String apellido;
   private String email;
@@ -17,13 +18,22 @@ public abstract class Usuario {
   }
 
   public Usuario(String nombre, String apellido, String email, char[] password, String dni,
-      List<Libro> librosPrestados) {
+      List<Libro> librosPrestados, int id) {
     this.nombre = nombre;
     this.apellido = apellido;
     this.email = email;
     this.password = password;
     this.dni = dni;
     this.librosPrestados = librosPrestados;
+    this.id = id;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 
   public String getNombre() {
@@ -75,6 +85,17 @@ public abstract class Usuario {
   }
 
   public boolean puedePrestar() {
+    System.out.println("librosPrestados.size() " + librosPrestados.size());
     return librosPrestados.size() < MAX_LIBROS_PRESTADOS;
+  }
+
+  public void prestarLibro(Libro libro) {
+    librosPrestados.add(libro);
+    System.out.println("Libro prestado: " + libro);
+  }
+
+  public void devolverLibro(Libro libro) {
+    librosPrestados.remove(libro);
+    System.out.println("Libro devuelto: " + libro);
   }
 }

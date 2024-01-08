@@ -1,18 +1,20 @@
 package controller;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import java.sql.SQLIntegrityConstraintViolationException;
 
 import javax.swing.JOptionPane;
 
 import controller.AppController.ViewType;
+import controller.utils.ValidateForm;
 import model.Estudiante;
 import model.Usuario;
 import model.db.MetodosDAO;
 import view.RegistroView;
 
-public class RegisterController implements MouseListener {
+public class RegisterController implements ActionListener {
 
   RegistroView registerView;
   AppController controller;
@@ -21,8 +23,8 @@ public class RegisterController implements MouseListener {
     this.registerView = registerView;
     this.controller = controller;
 
-    this.registerView.getBtnRegistrar().addMouseListener(this);
-    this.registerView.getBack().addMouseListener(this);
+    this.registerView.getBtnRegistrar().addActionListener(this);
+    this.registerView.getBack().addActionListener(this);
   }
 
   public Usuario getUserFromForm() {
@@ -59,7 +61,7 @@ public class RegisterController implements MouseListener {
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
+  public void actionPerformed(ActionEvent e) {
     Object source = e.getSource();
     if (source == registerView.getBtnRegistrar()) {
       onRegister();
@@ -67,26 +69,6 @@ public class RegisterController implements MouseListener {
     if (source == registerView.getBack()) {
       controller.showView(ViewType.LOGIN);
     }
-  }
-
-  @Override
-  public void mousePressed(MouseEvent e) {
-
-  }
-
-  @Override
-  public void mouseReleased(MouseEvent e) {
-
-  }
-
-  @Override
-  public void mouseEntered(MouseEvent e) {
-
-  }
-
-  @Override
-  public void mouseExited(MouseEvent e) {
-
   }
 
 }

@@ -87,13 +87,15 @@ public class LoginView extends JFrame {
 
     // Botón de login
     btnLogin = new JButton("Login");
+    btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
     // Label para el link de registro
     lblRegister = new JLabel("¿No tienes cuenta?", SwingConstants.CENTER);
 
     // Label para el link de registro
     lblRegisterLink = new JLabel("Regístrate", SwingConstants.CENTER);
-    lblRegisterLink.setForeground(new Color(255, 126, 208, 255));
+    lblRegisterLink.setForeground(new Color(255, 126, 208, 100));
+    lblRegisterLink.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
   }
 
   // Función para agregar los componentes al panel

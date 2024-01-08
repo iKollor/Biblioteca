@@ -2,7 +2,6 @@ package view.components;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 
@@ -17,32 +16,37 @@ import view.utils.fonts.SFProFont;
 
 public class LibroCard extends JPanel {
 
-  JLabel lblTituloLibro;
-  JLabel lblEstado;
+  private JLabel lblTituloLibro;
+  private JLabel lblEstado;
 
-  public LibroCard(Libro libro) {
+  private Estado estado;
+  private Libro libro;
 
-    Estado estado = libro.getEstado();
-    String titulo = libro.getTitulo();
+  public LibroCard(Libro libro, Estado estado) {
+    this.libro = libro;
+    this.estado = estado;
 
     setPreferredSize(new Dimension(200, 300)); // Sugerir un tamaño preferido
     setLayout(new BorderLayout());
     setBorder(BorderFactory.createLineBorder(Color.gray, 1));
     setBackground(new Color(69, 64, 92));
-    setCursor(new Cursor(Cursor.HAND_CURSOR));
-    setToolTipText("Ver detalles del libro");
 
     // TODO: Mostrar la imagen del libro
-    lblTituloLibro = new JLabel("<html><center><b>" + titulo + "</b></center></html>", SwingConstants.CENTER);
+    lblTituloLibro = new JLabel("<html><center><b>" + libro.getTitulo() + "</b></center></html>",
+        SwingConstants.CENTER);
     lblTituloLibro.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 24));
 
     lblEstado = new JLabel(estado.toString(), SwingConstants.CENTER);
     lblEstado.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 14));
 
     if (estado == Estado.DISPONIBLE) {
-      lblEstado.setForeground(new Color(25, 108, 38));
+      lblEstado.setForeground(new Color(114, 241, 184));
     } else if (estado == Estado.AGOTADO) {
-      lblEstado.setForeground(new Color(128, 35, 29));
+      lblEstado.setForeground(new Color(254, 68, 80));
+      lblTituloLibro.setForeground(Color.gray);
+      setBackground(new Color(55, 55, 59));
+    } else if (estado == Estado.PRESTADO) {
+      lblEstado.setForeground(new Color(255, 128, 0));
       setBackground(new Color(55, 55, 59));
     }
 
@@ -50,4 +54,27 @@ public class LibroCard extends JPanel {
     add(lblEstado, BorderLayout.SOUTH);
   }
 
+  public JLabel getLblTituloLibro() {
+    return lblTituloLibro;
+  }
+
+  public JLabel getLblEstado() {
+    return lblEstado;
+  }
+
+  public Estado getEstado() {
+    return estado;
+  }
+
+  public void setEstado(Estado estado) {
+    this.estado = estado;
+  }
+
+  public Libro getLibro() {
+    return libro;
+  }
+
+  public void setLibro(Libro libro) {
+    this.libro = libro;
+  }
 }

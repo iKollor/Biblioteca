@@ -1,10 +1,13 @@
 package controller;
 
+import java.awt.Color;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JOptionPane;
 
+import controller.utils.ValidateForm;
 import model.Usuario;
 import model.db.MetodosDAO;
 import view.LoginView;
@@ -20,9 +23,13 @@ public class LoginController implements MouseListener {
 
     this.loginView.getBtnLogin().addMouseListener(this);
     this.loginView.getLblRegisterLink().addMouseListener(this);
+
+    this.loginView.getTxtPassword().addKeyListener(getLoginKeyListener());
+    this.loginView.getTxtUser().addKeyListener(getLoginKeyListener());
   }
 
   public void onLogin() {
+    Usuario user = null;
 
     MetodosDAO dao = controller.getDao();
     ValidateForm validador = controller.getValidate();
@@ -32,15 +39,18 @@ public class LoginController implements MouseListener {
 
     if (usuario.equals("admin") && new String(password).equals("admin")) {
       JOptionPane.showMessageDialog(null, "Bienvenido administrador");
+      // Actualizar el estado del usuario en HomeView
+      controller.setUser(user);
       controller.showView(AppController.ViewType.HOME);
     } else if (validador.validateLoginForm(usuario, password)) {
-      Usuario user;
       try {
         user = dao.authLogin(usuario, new String(password));
         System.out.println("Usuario: " + user);
         if (user != null) {
           JOptionPane.showMessageDialog(null, "Bienvenido " + user.getNombre(), "Bienvenido",
               JOptionPane.INFORMATION_MESSAGE);
+          // Actualizar el estado del usuario en HomeView
+          controller.setUser(user);
           controller.showView(AppController.ViewType.HOME);
         } else {
           JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error",
@@ -79,12 +89,41 @@ public class LoginController implements MouseListener {
 
   @Override
   public void mouseEntered(MouseEvent e) {
+    Object source = e.getSource();
 
+    if (source == loginView.getLblRegisterLink()) {
+      loginView.getLblRegisterLink().setForeground(new Color(255, 126, 208, 255));
+    }
   }
 
   @Override
   public void mouseExited(MouseEvent e) {
+    Object source = e.getSource();
 
+    if (source == loginView.getLblRegisterLink()) {
+      loginView.getLblRegisterLink().setForeground(new Color(255, 126, 208, 100));
+    }
+  }
+
+  // KeyListener para el login form
+  public KeyListener getLoginKeyListener() {
+    return new KeyListener() {
+
+      @Override
+      public void keyTyped(java.awt.event.KeyEvent e) {
+      }
+
+      @Override
+      public void keyPressed(java.awt.event.KeyEvent e) {
+        if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+          onLogin();
+        }
+      }
+
+      @Override
+      public void keyReleased(java.awt.event.KeyEvent e) {
+      }
+    };
   }
 
 }

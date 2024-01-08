@@ -4,4 +4,5 @@ package model.interfaces;
 public enum Estado {
   DISPONIBLE, // Indica que el libro está disponible para ser prestado
   AGOTADO, // Indica que el libro no está disponible para ser prestado
+  PRESTADO // Indica que el libro está prestado
 }

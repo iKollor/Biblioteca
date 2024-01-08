@@ -12,31 +12,29 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
-import model.Libro;
+import controller.HomeController;
 import view.components.LibroCard;
 import view.components.SearchPanel;
 import view.utils.WrapLayout;
 import view.utils.fonts.SFProFont;
 
-public class Catalog extends JPanel {
+public class CatalogPanel extends JPanel {
 
   private JPanel gridPanel; // Panel para la grilla
   private SearchPanel searchPanel; // Panel para la búsqueda
-  private List<Libro> libros;
 
-  JPanel northContainer;
-  JScrollPane scrollPane;
+  private JPanel northContainer;
+  private JScrollPane scrollPane;
 
-  public Catalog(List<Libro> libros) {
-    this.libros = libros;
+  List<LibroCard> libroCard;
 
+  public CatalogPanel() {
     setLayout(new BorderLayout());
     setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-    setName("CATALOGO");
+    setName(HomeController.Panel.CATALOGO.toString());
 
     initComponents();
     addComponents();
-    mostrarLibros();
   }
 
   public void initComponents() {
@@ -62,20 +60,26 @@ public class Catalog extends JPanel {
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
   }
 
-  public void mostrarLibros() {
-    gridPanel.removeAll(); // Limpiar el panel antes de añadir nuevos componentes
-
-    for (Libro libro : libros) {
-      LibroCard libroCard = new LibroCard(libro);
-      gridPanel.add(libroCard);
-    }
-
-    gridPanel.revalidate();
-    gridPanel.repaint();
-  }
-
   public void addComponents() {
     add(northContainer, BorderLayout.NORTH);
     add(scrollPane, BorderLayout.CENTER);
   }
+
+  public void updateCards() {
+    gridPanel.removeAll();
+    for (LibroCard card : libroCard) {
+      gridPanel.add(card);
+    }
+    gridPanel.revalidate();
+    gridPanel.repaint();
+  }
+
+  public List<LibroCard> getLibroCard() {
+    return libroCard;
+  }
+
+  public void setLibroCard(List<LibroCard> libroCard) {
+    this.libroCard = libroCard;
+  }
+
 }

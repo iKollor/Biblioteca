@@ -4,31 +4,20 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-
-import controller.AppController;
-import model.Usuario;
-import view.utils.fonts.SFProFont;
 
 public class Sidebar extends JPanel {
 
-  private JButton btnCatálogo, btnPrestamos, btnUsuarios, btnAddLibro, btnAddAutor, btnLogout;
+  private JButton btnCatalogo, btnPrestamos, btnUsuarios, btnAddLibro, btnAddAutor, btnLogout;
   private JPanel userInfoContainer, buttonsContainer;
 
-  private AppController controller;
-  private Usuario user;
-
-  public Sidebar(AppController controller) {
-    this.controller = controller;
+  public Sidebar() {
     setLayout(new BorderLayout());
     setPreferredSize(new Dimension(160, 600));
     setBackground(new Color(54, 51, 77));
@@ -36,13 +25,6 @@ public class Sidebar extends JPanel {
 
     initComponents();
     addComponents();
-    initEvents();
-  }
-
-  public void setUser(Usuario user) {
-    this.user = user;
-    updateUserInfoContainer();
-    updateButtonsContainer();
   }
 
   private void initComponents() {
@@ -58,9 +40,9 @@ public class Sidebar extends JPanel {
     buttonsContainer.setPreferredSize(new Dimension(160, 400));
 
     // Botones
-    btnCatálogo = new JButton("Catálogo");
-    btnPrestamos = new JButton("Préstamos");
-    btnUsuarios = new JButton("Usuarios");
+    btnCatalogo = new JButton("Catálogo");
+    btnPrestamos = new JButton("Historial de Préstamos");
+    btnUsuarios = new JButton("Usuarios Registrados");
     btnAddLibro = new JButton("Agregar Libro");
     btnAddAutor = new JButton("Agregar Autor");
 
@@ -73,23 +55,6 @@ public class Sidebar extends JPanel {
     add(userInfoContainer, BorderLayout.NORTH);
     add(buttonsContainer, BorderLayout.CENTER);
     add(btnLogout, BorderLayout.SOUTH);
-  }
-
-  private void updateUserInfoContainer() {
-    userInfoContainer.removeAll();
-    String userNombre = user == null ? "Administrador" : user.getNombre() + " " + user.getApellido();
-    JLabel lblNombre = new JLabel(userNombre, SwingConstants.CENTER);
-    lblNombre.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 18));
-    userInfoContainer.add(lblNombre);
-  }
-
-  private void updateButtonsContainer() {
-    buttonsContainer.removeAll();
-    if (user == null) { // Si no hay usuario, mostrar botones de administrador
-      añadirBotones(List.of(btnUsuarios, btnAddLibro, btnAddAutor, btnCatálogo, btnPrestamos));
-    } else {
-      añadirBotones(List.of(btnCatálogo, btnPrestamos));
-    }
   }
 
   private void setButtonProperties(JButton boton) {
@@ -121,17 +86,75 @@ public class Sidebar extends JPanel {
     }
   }
 
-  public void initEvents() {
-    btnLogout.addActionListener(e -> controller.onLogout()); // Agregar evento al botón de logout
-    btnCatálogo.addActionListener(e -> controller.showCatalogoView()); // Agregar evento al botón de catálogo
+  public List<JButton> getBotonesUsuario() {
+    return List.of(btnCatalogo, btnPrestamos);
+  }
 
-    // TODO: Agregar eventos a los botones
-    // btnPrestamos.addActionListener(e -> controller.showPrestamosView()); //
-    // Agregar evento al botón de préstamos
+  public List<JButton> getBotonesAdmin() {
+    return List.of(btnCatalogo, btnPrestamos, btnUsuarios, btnAddLibro, btnAddAutor);
+  }
 
-    // btnUsuarios.addActionListener(e -> controller.showUsuariosView()); // Agregar
-    // evento al botón de usuarios
-    // btnAddLibro.addActionListener(e -> controller.showAddLibroView()); // Agregar
-    // evento al botón de agregar libro
+  public JButton getBtnCatalogo() {
+    return btnCatalogo;
+  }
+
+  public void setBtnCatalogo(JButton btnCatalogo) {
+    this.btnCatalogo = btnCatalogo;
+  }
+
+  public JButton getBtnPrestamos() {
+    return btnPrestamos;
+  }
+
+  public void setBtnPrestamos(JButton btnPrestamos) {
+    this.btnPrestamos = btnPrestamos;
+  }
+
+  public JButton getBtnUsuarios() {
+    return btnUsuarios;
+  }
+
+  public void setBtnUsuarios(JButton btnUsuarios) {
+    this.btnUsuarios = btnUsuarios;
+  }
+
+  public JButton getBtnAddLibro() {
+    return btnAddLibro;
+  }
+
+  public void setBtnAddLibro(JButton btnAddLibro) {
+    this.btnAddLibro = btnAddLibro;
+  }
+
+  public JButton getBtnAddAutor() {
+    return btnAddAutor;
+  }
+
+  public void setBtnAddAutor(JButton btnAddAutor) {
+    this.btnAddAutor = btnAddAutor;
+  }
+
+  public JButton getBtnLogout() {
+    return btnLogout;
+  }
+
+  public void setBtnLogout(JButton btnLogout) {
+    this.btnLogout = btnLogout;
+  }
+
+  public JPanel getUserInfoContainer() {
+    return userInfoContainer;
+  }
+
+  public void setUserInfoContainer(JPanel userInfoContainer) {
+    this.userInfoContainer = userInfoContainer;
+  }
+
+  public JPanel getButtonsContainer() {
+    return buttonsContainer;
+  }
+
+  public void setButtonsContainer(JPanel buttonsContainer) {
+    this.buttonsContainer = buttonsContainer;
   }
 }

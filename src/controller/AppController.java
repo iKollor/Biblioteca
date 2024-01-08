@@ -1,17 +1,11 @@
 package controller;
 
-import java.util.List;
-
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-
+import controller.utils.ValidateForm;
 import model.Usuario;
 import model.db.MetodosDAO;
 import view.HomeView;
 import view.LoginView;
 import view.RegistroView;
-import view.panels.Catalog;
-import model.Libro;
 
 public class AppController {
 
@@ -19,16 +13,10 @@ public class AppController {
     LOGIN, REGISTER, HOME
   }
 
-  public enum Panel {
-    CATALOGO, PRESTAMOS, USUARIOS, ADD_LIBRO, ADD_AUTOR
-  }
-
   // Vistas
   private LoginView loginView;
   private RegistroView registerView;
   private HomeView homeView;
-  // Paneles
-  private Catalog catalogoView;
 
   // Modelos
   private MetodosDAO dao; // DAO: Data Access Object
@@ -36,23 +24,15 @@ public class AppController {
   private ValidateForm validate = new ValidateForm(); // Validador de formularios
   private Usuario user = null; // Usuario actual
 
-  private Panel currentPanel = null;
   private ViewType currentView = null;
 
   LoginController loginController = null;
   RegisterController registerController = null;
+  HomeController homeController = null;
 
   // Constructor
   public AppController(MetodosDAO dao) {
     this.dao = dao;
-  }
-
-  public ValidateForm getValidate() {
-    return validate;
-  }
-
-  public MetodosDAO getDao() {
-    return dao;
   }
 
   public void showView(ViewType viewType) {
@@ -69,13 +49,13 @@ public class AppController {
         registerView.setVisible(true);
         break;
       case HOME:
-        homeView = new HomeView(this);
-        homeView.setUser(user); // Establecer el usuario en HomeView
+        homeView = new HomeView();
+        homeController = new HomeController(homeView, this);
         homeView.setVisible(true);
         break;
     }
 
-    // Cerrar las vistas anteriores
+    // Cerrar las vistas anteriores para liberar memoria
     if (currentView != null && currentView != viewType) {
       switch (currentView) {
         case LOGIN:
@@ -94,39 +74,46 @@ public class AppController {
     currentView = viewType;
   }
 
-  private void showPanel(Panel panel) {
-    switch (panel) {
-      case CATALOGO:
-        if (catalogoView == null) {
-          Catalog catalogoView = new Catalog(getLibros());
-          homeView.addPanel(catalogoView, "CATALOGO");
-        }
-        homeView.switchPanel("CATALOGO");
-        break;
-      // TODO: Agregar casos para otros paneles
-      default:
-        throw new IllegalArgumentException("Panel no encontrado");
-    }
-    currentPanel = panel;
+  // Lógica de Negocio
+
+  public LoginView getLoginView() {
+    return loginView;
   }
 
-  public void showCatalogoView() {
-    showPanel(Panel.CATALOGO);
+  public void setLoginView(LoginView loginView) {
+    this.loginView = loginView;
   }
 
-  public void onLogout() {
-    homeView.setUser(null);
-    user = null;
-    showView(ViewType.LOGIN);
+  public RegistroView getRegisterView() {
+    return registerView;
   }
 
-  public List<Libro> getLibros() {
-    try {
-      return dao.getLibros();
-    } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, "Error al obtener libros: " + e.getMessage(), "Error",
-          JOptionPane.ERROR_MESSAGE);
-      return null;
-    }
+  public void setRegisterView(RegistroView registerView) {
+    this.registerView = registerView;
   }
+
+  public HomeView getHomeView() {
+    return homeView;
+  }
+
+  public void setHomeView(HomeView homeView) {
+    this.homeView = homeView;
+  }
+
+  public Usuario getUser() {
+    return user;
+  }
+
+  public void setUser(Usuario user) {
+    this.user = user;
+  }
+
+  public ValidateForm getValidate() {
+    return validate;
+  }
+
+  public MetodosDAO getDao() {
+    return dao;
+  }
+
 }

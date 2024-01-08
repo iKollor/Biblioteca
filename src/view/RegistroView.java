@@ -61,7 +61,6 @@ public class RegistroView extends JFrame {
   }
 
   public RegistroView() {
-
     setTitle("Sistema de Gestión de Biblioteca");
     setSize(500, 700);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,8 +96,10 @@ public class RegistroView extends JFrame {
     txtConfirmPassword.setToolTipText("Confirmar contraseña, debe coincidir con la contraseña ingresada");
 
     btnRegistrar = new JButton("Registrar");
+    btnRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
     back = new JButton("<-");
+    back.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
   }
 
   public void addComponents() {

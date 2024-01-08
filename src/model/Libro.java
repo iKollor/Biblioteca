@@ -2,52 +2,21 @@ package model;
 
 import java.time.Year;
 
-import model.interfaces.Estado;
-
-public class Libro {
-  private int ISBN; // International Standard Book Number es un identificador único para libros
-  private String titulo;
-  private Estado estado;
-  private Autor autor;
-  private Year anio;
+public class Libro extends ElementoBiblioteca {
+  private int ISBN;
   private int paginas;
-  private int edition;
+  private int edicion;
+  private int saldo; // cantidad de copias disponibles
 
   public Libro() {
   }
 
-  public Libro(int iSBN, String titulo, Estado estado, Autor autor, Year anio, int paginas, int edition) {
+  public Libro(String titulo, Autor autor, Year anioPublicacion, int iSBN, int paginas, int edicion, int saldo) {
+    super(titulo, autor, anioPublicacion);
     ISBN = iSBN;
-    this.titulo = titulo;
-    this.estado = estado;
-    this.autor = autor;
-    this.anio = anio;
     this.paginas = paginas;
-    this.edition = edition;
-  }
-
-  public Year getAnio() {
-    return anio;
-  }
-
-  public void setAnio(Year anio) {
-    this.anio = anio;
-  }
-
-  public int getPaginas() {
-    return paginas;
-  }
-
-  public void setPaginas(int paginas) {
-    this.paginas = paginas;
-  }
-
-  public int getEdition() {
-    return edition;
-  }
-
-  public void setEdition(int edition) {
-    this.edition = edition;
+    this.edicion = edicion;
+    this.saldo = saldo;
   }
 
   public int getISBN() {
@@ -58,27 +27,28 @@ public class Libro {
     ISBN = iSBN;
   }
 
-  public String getTitulo() {
-    return titulo;
+  public int getPaginas() {
+    return paginas;
   }
 
-  public void setTitulo(String titulo) {
-    this.titulo = titulo;
+  public void setPaginas(int paginas) {
+    this.paginas = paginas;
   }
 
-  public Estado getEstado() {
-    return estado;
+  public int getEdicion() {
+    return edicion;
   }
 
-  public void setEstado(Estado estado) {
-    this.estado = estado;
+  public void setEdicion(int edicion) {
+    this.edicion = edicion;
   }
 
-  public Autor getAutor() {
-    return autor;
+  public int getSaldo() {
+    return saldo;
   }
 
-  public void setAutor(Autor autor) {
-    this.autor = autor;
+  public void setSaldo(int saldo) {
+    this.saldo = saldo;
   }
+
 }

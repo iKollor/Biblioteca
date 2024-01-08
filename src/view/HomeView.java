@@ -4,14 +4,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import controller.AppController;
-
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Component;
 import java.awt.Font;
 
-import model.Usuario;
 import view.components.Sidebar;
 import view.utils.fonts.SFProFont;
 
@@ -19,43 +15,27 @@ public class HomeView extends JFrame {
 
   private Sidebar sidebar;
   private JLabel lblDefault;
-  private AppController controller;
   private JPanel mainPanel;
-  private CardLayout cardLayout;
 
-  public HomeView(AppController controller) {
-    this.controller = controller;
+  public HomeView() {
     setTitle("Sistema de Gestión de Biblioteca");
     setSize(900, 700);
-    setMinimumSize(getSize()); // Evita que la ventana se haga más pequeña
+    setMinimumSize(getSize());
     setLocationRelativeTo(null);
-    setLayout(new BorderLayout());
     setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     initComponents();
     addComponents();
-
-    cardLayout = (CardLayout) mainPanel.getLayout();
-
-  }
-
-  public void setUser(Usuario user) {
-    sidebar.setUser(user); // Actualiza sidebar con el nuevo usuario
   }
 
   public void initComponents() {
-    sidebar = new Sidebar(controller);
+    sidebar = new Sidebar();
 
-    lblDefault = new JLabel(
-        "<html><center>Seleccione una opción del menú lateral</center></html>", JLabel.CENTER);
-    lblDefault.setFont(new java.awt.Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 22));
+    lblDefault = new JLabel("<html><center>Seleccione una opción del menú lateral</center></html>", JLabel.CENTER);
+    lblDefault.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 22));
 
-    mainPanel = new JPanel();
-    cardLayout = new CardLayout();
-    mainPanel.setLayout(cardLayout);
+    mainPanel = new JPanel(new CardLayout());
     mainPanel.add(lblDefault, "DEFAULT");
-
-    cardLayout.show(mainPanel, "DEFAULT"); // Mostrar el panel por defecto
   }
 
   public void addComponents() {
@@ -63,22 +43,31 @@ public class HomeView extends JFrame {
     add(mainPanel, BorderLayout.CENTER);
   }
 
+  // Métodos para interactuar con sidebar
+  public Sidebar getSidebar() {
+    return sidebar;
+  }
+
   public void switchPanel(String panelIdentifier) {
-    cardLayout.show(mainPanel, panelIdentifier);
+    ((CardLayout) mainPanel.getLayout()).show(mainPanel, panelIdentifier);
   }
 
   public void addPanel(JPanel panel, String panelIdentifier) {
-    boolean panelExists = false;
-    for (Component comp : mainPanel.getComponents()) {
-      if (comp.getName() != null && comp.getName().equals(panelIdentifier)) {
-        panelExists = true;
-        break;
-      }
-    }
+    mainPanel.add(panel, panelIdentifier);
+  }
 
-    if (!panelExists) {
-      panel.setName(panelIdentifier); // Asigna un nombre al panel para identificarlo
-      mainPanel.add(panel, panelIdentifier);
-    }
+  public void removePanel(JPanel panel) {
+    mainPanel.remove(panel);
+  }
+
+  public void updateVisiblePanel() {
+    mainPanel.revalidate();
+    mainPanel.repaint();
+    revalidate();
+    repaint();
+  }
+
+  public JPanel getMainPanel() {
+    return mainPanel;
   }
 }

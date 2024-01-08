@@ -1,7 +1,6 @@
 package view.components;
 
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;

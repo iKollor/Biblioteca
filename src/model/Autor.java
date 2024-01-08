@@ -6,13 +6,11 @@ public class Autor {
   private int id;
   private String nombre;
   private String nacionalidad;
-  private List<Libro> librosEscritos;
 
-  public Autor(int id, String nombre, String nacionalidad, List<Libro> librosEscritos) {
+  public Autor(int id, String nombre, String nacionalidad) {
     this.id = id;
     this.nombre = nombre;
     this.nacionalidad = nacionalidad;
-    this.librosEscritos = librosEscritos;
   }
 
   public Autor() {
@@ -42,11 +40,22 @@ public class Autor {
     this.nacionalidad = nacionalidad;
   }
 
-  public List<Libro> getLibrosEscritos() {
-    return librosEscritos;
+  // El método toString será usado por el JComboBox para obtener el texto que se
+  // muestra
+  @Override
+  public String toString() {
+    return nombre;
   }
 
-  public void setLibrosEscritos(List<Libro> librosEscritos) {
-    this.librosEscritos = librosEscritos;
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null || getClass() != obj.getClass())
+      return false;
+    Autor autor = (Autor) obj;
+
+    return id == autor.id;
   }
+
 }
