@@ -19,6 +19,19 @@
             "name": "proyectoPOO",
             "database": "proyectopoo",
             "username": "root"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "www.ecuinfo.net",
+            "port": 3306,
+            "driver": "MySQL",
+            "database": "biblioteca",
+            "username": "ugjavap",
+            "name": "biblioteca"
         }
     ]
 }

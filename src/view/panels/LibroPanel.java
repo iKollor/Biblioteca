@@ -20,15 +20,15 @@ import view.utils.fonts.SFProFont;
 
 public class LibroPanel extends JPanel {
 
-  JPanel topContainer, bottomContainer;
+  private JPanel topContainer, bottomContainer;
 
-  Libro libro;
-  Estado estado;
-  Usuario user;
+  private Libro libro;
+  private Estado estado;
+  private Usuario user;
 
-  JButton btnPrestar, btnDevolver, btnAddCopia, btnRemoveCopia;
+  private JButton btnPrestar, btnDevolver, btnAddCopia, btnRemoveCopia;
 
-  LibroCard libroCard = null;
+  private LibroCard libroCard = null;
 
   private JLabel lblTitulo, lblAutor, lblAnioPublicacion, lblEdicion, lblPaginas, lblSaldo;
 
@@ -80,11 +80,12 @@ public class LibroPanel extends JPanel {
         SwingConstants.LEFT);
     lblEdicion.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 16));
 
-    lblPaginas = new JLabel(String.valueOf("<html><b>No. Paginas: </b>" + libro.getPaginas() + "</html>"),
+    lblPaginas = new JLabel(String.valueOf("<html><b>No. de Paginas: </b>" + libro.getPaginas() + "</html>"),
         SwingConstants.LEFT);
     lblPaginas.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 16));
 
-    lblSaldo = new JLabel(String.valueOf("<html><b>Saldo: </b>" + libro.getSaldo() + "</html>"), SwingConstants.LEFT);
+    lblSaldo = new JLabel(String.valueOf("<html><b>No. de Copias: </b>" + libro.getSaldo() + "</html>"),
+        SwingConstants.LEFT);
     lblSaldo.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 16));
 
     container.add(lblAutor);
@@ -186,4 +187,5 @@ public class LibroPanel extends JPanel {
   public void setBtnRemoveCopia(JButton btnRemoveCopia) {
     this.btnRemoveCopia = btnRemoveCopia;
   }
+
 }

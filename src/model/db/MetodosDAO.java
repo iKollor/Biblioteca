@@ -4,10 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.util.List;
 
 import model.Autor;
@@ -15,7 +16,6 @@ import model.Estudiante;
 import model.Libro;
 import model.Prestamo;
 import model.Usuario;
-import model.interfaces.Estado;
 
 public class MetodosDAO {
 
@@ -33,6 +33,8 @@ public class MetodosDAO {
   private static final String COL_AUTOR_ID = "id";
   private static final String COL_AUTOR_NOMBRE = "nombre";
   private static final String COL_AUTOR_NACIONALIDAD = "nacionalidad";
+
+  protected static final SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
 
   public boolean Register(Usuario user) throws SQLException {
 
@@ -55,7 +57,7 @@ public class MetodosDAO {
     }
   }
 
-  public Usuario authLogin(String email, String password) throws SQLException {
+  public Usuario authLogin(String email, String password) throws SQLException, Exception {
 
     try (Connection cn = Conexion.Conectar();
         PreparedStatement pst = cn
@@ -81,11 +83,10 @@ public class MetodosDAO {
         List<Libro> librosPrestados = new ArrayList<>();
         for (Prestamo prestamo : prestamos) {
           System.out.println("Registro encontrado: " + prestamo.getLibro().getTitulo());
-          System.out.println("Estado del libro: " + (prestamo.isDevuelto() ? "DEVUELTO" : "PRESTADO"));
           librosPrestados.add(prestamo.getLibro());
         }
-        user.setLibrosPrestados(librosPrestados);
-        System.out.println("Libros prestados: " + librosPrestados);
+        user.setLibrosPrestados(librosPrestados.stream().map(libro -> libro.getISBN()).toList());
+        System.out.println("Libros prestados del usuario: " + librosPrestados);
         return user;
       }
       System.out.println("Usuario no encontrado");
@@ -115,7 +116,7 @@ public class MetodosDAO {
         libro.setTitulo(rs.getString(COL_TITULO));
         libro.setAutor(autor);
         libro.setAnioPublicacion(Year.of(rs.getInt(COL_YEAR)));
-        libro.setISBN(rs.getInt(COL_ISBN));
+        libro.setISBN(rs.getString(COL_ISBN));
         libro.setPaginas(rs.getInt(COL_PAGINAS));
         libro.setEdicion(rs.getInt(COL_EDITION));
         libro.setSaldo(rs.getInt(COL_SALDO));
@@ -132,6 +133,7 @@ public class MetodosDAO {
 
   public Autor getAutor(int id) throws SQLException {
     String sql = "SELECT * FROM autores WHERE id = ?";
+
     try (Connection cn = Conexion.Conectar();
         PreparedStatement pst = cn.prepareStatement(sql)) {
       pst.setInt(1, id);
@@ -159,17 +161,30 @@ public class MetodosDAO {
     return null;
   }
 
+  public void addAutor(Autor autor) throws SQLException {
+    String sql = "INSERT INTO autores (nombre, nacionalidad) VALUES (?, ?)";
+    try (Connection cn = Conexion.Conectar();
+        PreparedStatement pst = cn.prepareStatement(sql)) {
+      pst.setString(1, autor.getNombre());
+      pst.setString(2, autor.getNacionalidad());
+      pst.execute();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    }
+  }
+
   public void addLibro(Libro libro) throws SQLException {
-    Connection cn = null;
     PreparedStatement pstLibro = null;
     PreparedStatement pstCopia = null;
-    PreparedStatement pstCheckISBN = null;
     ResultSet rs = null;
+    Connection cn = null;
 
     String sqlLibro = "INSERT INTO libros (titulo, autor_id, year, ISBN, pages, edition) VALUES (?, ?, ?, ?, ?, ?)";
 
     try {
       cn = Conexion.Conectar();
+      ;
       cn.setAutoCommit(false);
 
       // Comprobación de ISBN Existente
@@ -181,7 +196,7 @@ public class MetodosDAO {
         pstLibro.setString(1, libro.getTitulo());
         pstLibro.setInt(2, libro.getAutor().getId());
         pstLibro.setInt(3, libro.getAnioPublicacion().getValue());
-        pstLibro.setInt(4, libro.getISBN());
+        pstLibro.setString(4, libro.getISBN());
         pstLibro.setInt(5, libro.getPaginas());
         pstLibro.setInt(6, libro.getEdicion());
         pstLibro.execute();
@@ -189,10 +204,8 @@ public class MetodosDAO {
         System.out.println("Libro registrado");
       } else {
         System.out.println("El libro ya existe");
-        pstLibro = cn.prepareStatement("UPDATE libros SET saldo = saldo + 1 WHERE ISBN = ?");
-        pstLibro.setInt(1, libro.getISBN());
-        pstLibro.execute();
-        System.out.println("Saldo actualizado");
+        addCopia(libro);
+        return;
       }
 
       cn.commit();
@@ -201,23 +214,17 @@ public class MetodosDAO {
         cn.rollback();
       throw e;
     } finally {
-      if (pstLibro != null)
-        pstLibro.close();
       if (pstCopia != null)
         pstCopia.close();
-      if (pstCheckISBN != null)
-        pstCheckISBN.close();
-      if (rs != null)
-        rs.close();
-      if (cn != null)
-        cn.close();
+      closeResources(cn, pstLibro, rs);
     }
   }
 
   public List<Autor> getAutores() throws SQLException {
     List<Autor> autores = new ArrayList<>();
     String sql = "SELECT * FROM autores";
-    try (Connection cn = Conexion.Conectar();
+    try (
+        Connection cn = Conexion.Conectar();
         PreparedStatement pst = cn.prepareStatement(sql);
         ResultSet rs = pst.executeQuery()) {
       while (rs.next()) {
@@ -235,11 +242,11 @@ public class MetodosDAO {
     return autores;
   }
 
-  public boolean isLibroRegistrado(int isbn) throws SQLException {
+  public boolean isLibroRegistrado(String isbn) throws SQLException {
     String sql = "SELECT COUNT(*) FROM libros WHERE ISBN = ?";
     try (Connection cn = Conexion.Conectar();
         PreparedStatement pst = cn.prepareStatement(sql)) {
-      pst.setInt(1, isbn);
+      pst.setString(1, isbn);
       try (ResultSet rs = pst.executeQuery()) {
         if (rs.next()) {
           return rs.getInt(1) > 0;
@@ -252,12 +259,12 @@ public class MetodosDAO {
     return false;
   }
 
-  public Libro getLibro(int iSBN) throws SQLException {
+  public Libro getLibro(String iSBN) throws SQLException {
     System.out.println("Buscando libro con ISBN: " + iSBN);
     String sql = "SELECT l.*, a.id AS autor_id, a.nombre AS autor_nombre, a.nacionalidad FROM libros l JOIN autores a ON l.autor_id = a.id WHERE l.ISBN = ?";
     try (Connection cn = Conexion.Conectar();
         PreparedStatement pst = cn.prepareStatement(sql)) {
-      pst.setInt(1, iSBN);
+      pst.setString(1, iSBN);
       try (ResultSet rs = pst.executeQuery()) {
         if (rs.next()) {
           Autor autor = new Autor();
@@ -269,7 +276,7 @@ public class MetodosDAO {
           libro.setTitulo(rs.getString(COL_TITULO));
           libro.setAutor(autor);
           libro.setAnioPublicacion(Year.of(rs.getInt(COL_YEAR)));
-          libro.setISBN(rs.getInt(COL_ISBN));
+          libro.setISBN(rs.getString(COL_ISBN));
           libro.setPaginas(rs.getInt(COL_PAGINAS));
           libro.setEdicion(rs.getInt(COL_EDITION));
           libro.setSaldo(rs.getInt(COL_SALDO));
@@ -284,20 +291,7 @@ public class MetodosDAO {
     return null;
   }
 
-  public void getAutor(Autor autor) throws SQLException {
-    String sql = "INSERT INTO autores (nombre, nacionalidad) VALUES (?, ?)";
-    try (Connection cn = Conexion.Conectar();
-        PreparedStatement pst = cn.prepareStatement(sql)) {
-      pst.setString(1, autor.getNombre());
-      pst.setString(2, autor.getNacionalidad());
-      pst.execute();
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw e;
-    }
-  }
-
-  public List<Prestamo> getPrestamos(Usuario user) throws SQLException {
+  public List<Prestamo> getPrestamos(Usuario user) throws SQLException, Exception {
     System.out.println("Obteniendo Préstamos");
     String sql = "SELECT * FROM prestamos WHERE user_id = ?";
     List<Prestamo> prestamos = new ArrayList<>();
@@ -310,19 +304,20 @@ public class MetodosDAO {
           prestamo.setId(rs.getInt("prestamo_id"));
 
           // Manejar posibles fechas nulas
-          Date fechaPrestamo = rs.getDate("fecha_prestamo");
+          Timestamp fechaPrestamo = rs.getTimestamp("fecha_prestamo");
           if (fechaPrestamo != null) {
-            prestamo.setFechaPrestamo(fechaPrestamo.toLocalDate());
+            prestamo.setFechaPrestamo(fechaPrestamo);
           }
 
-          Date fechaDevolucion = rs.getDate("fecha_devolucion");
+          Timestamp fechaDevolucion = rs.getTimestamp("fecha_devolucion");
           if (fechaDevolucion != null) {
-            prestamo.setFechaDevolucion(fechaDevolucion.toLocalDate());
+            prestamo.setFechaDevolucion(fechaDevolucion);
           }
+
           prestamo.setDevuelto(rs.getBoolean("devuelto"));
 
           // Obtener el libro
-          Libro libro = getLibro(rs.getInt("libro_id"));
+          Libro libro = getLibro(rs.getString("libro_id"));
           prestamo.setLibro(libro);
 
           prestamo.setUsuario(user);
@@ -337,7 +332,7 @@ public class MetodosDAO {
     return prestamos;
   }
 
-  public List<Prestamo> getPrestamos() throws SQLException {
+  public List<Prestamo> getPrestamos() throws SQLException, Exception {
     String sql = "SELECT * FROM prestamos";
     List<Prestamo> prestamos = new ArrayList<>();
     try (Connection cn = Conexion.Conectar();
@@ -347,16 +342,19 @@ public class MetodosDAO {
         Prestamo prestamo = new Prestamo();
         prestamo.setId(rs.getInt("prestamo_id"));
 
-        Date fechaPrestamo = rs.getDate("fecha_prestamo");
+        // Manejar posibles fechas nulas
+        Timestamp fechaPrestamo = rs.getTimestamp("fecha_prestamo");
         if (fechaPrestamo != null) {
-          prestamo.setFechaPrestamo(fechaPrestamo.toLocalDate());
+          prestamo.setFechaPrestamo(fechaPrestamo);
         }
-        Date fechaDevolucion = rs.getDate("fecha_devolucion");
+
+        Timestamp fechaDevolucion = rs.getTimestamp("fecha_devolucion");
         if (fechaDevolucion != null) {
-          prestamo.setFechaDevolucion(fechaDevolucion.toLocalDate());
+          prestamo.setFechaDevolucion(fechaDevolucion);
         }
+
         prestamo.setDevuelto(rs.getBoolean("devuelto"));
-        prestamo.setLibro(getLibro(rs.getInt("libro_id")));
+        prestamo.setLibro(getLibro(rs.getString("libro_id")));
         prestamo.setUsuario(getUsuario(rs.getInt("user_id")));
         prestamos.add(prestamo);
       }
@@ -381,15 +379,7 @@ public class MetodosDAO {
           user.setEmail(rs.getString("email"));
           user.setDni(rs.getString("dni"));
           user.setId(rs.getInt("id"));
-          // obtener prestamos
-          List<Prestamo> prestamos = getPrestamos(user);
-          List<Libro> librosPrestados = new ArrayList<>();
-          for (Prestamo prestamo : prestamos) {
-            librosPrestados.add(prestamo.getLibro());
-          }
-          user.setLibrosPrestados(librosPrestados);
           System.out.println("Usuario encontrado: " + user.getNombre() + " " + user.getApellido());
-          System.out.println("Prestamos: " + librosPrestados);
           return user;
         }
       }
@@ -401,22 +391,28 @@ public class MetodosDAO {
   }
 
   public void addPrestamo(Prestamo prestamo) throws SQLException {
+
+    System.out.println("Registrando nuevo préstamo del libro: " + prestamo.getLibro().getTitulo());
+
     String sqlPrestamo = "INSERT INTO prestamos (fecha_prestamo, devuelto, libro_id, user_id) VALUES (?, ?, ?, ?)";
 
-    Connection cn = null;
     PreparedStatement pst = null;
-
+    Connection cn = Conexion.Conectar();
     try {
       // Iniciar la conexión y configurar para manejar transacciones
       cn = Conexion.Conectar();
+      ;
       cn.setAutoCommit(false); // Deshabilitar el auto-commit para manejar transacciones manualmente
 
       // Preparar y ejecutar la inserción del préstamo
       pst = cn.prepareStatement(sqlPrestamo);
-      pst.setDate(1, java.sql.Date.valueOf(prestamo.getFechaPrestamo()));
+      pst.setTimestamp(1, java.sql.Timestamp.valueOf(LocalDateTime.now()));
       pst.setBoolean(2, prestamo.isDevuelto());
-      pst.setInt(3, prestamo.getLibro().getISBN());
+      pst.setString(3, prestamo.getLibro().getISBN());
       pst.setInt(4, prestamo.getUsuario().getId());
+
+      removeCopia(prestamo.getLibro());
+
       pst.execute();
       System.out.println("Prestamo registrado");
 
@@ -437,18 +433,17 @@ public class MetodosDAO {
   public void devolucion(Prestamo selectedPrestamo) throws SQLException {
 
     String sql = "UPDATE prestamos SET fecha_devolucion = ?, devuelto = ? WHERE prestamo_id = ?";
-    Connection cn = null;
     PreparedStatement pst = null;
-    PreparedStatement pstCopia = null;
-
+    Connection cn = Conexion.Conectar();
     try {
-      cn = Conexion.Conectar();
       cn.setAutoCommit(false);
 
       pst = cn.prepareStatement(sql);
-      pst.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
+      pst.setTimestamp(1, java.sql.Timestamp.valueOf(LocalDateTime.now()));
       pst.setBoolean(2, true);
       pst.setInt(3, selectedPrestamo.getId());
+
+      addCopia(selectedPrestamo.getLibro());
       pst.execute();
       System.out.println("Prestamo actualizado");
 
@@ -460,7 +455,7 @@ public class MetodosDAO {
       e.printStackTrace();
       throw e;
     } finally {
-      closeResources(cn, pstCopia, null);
+      closeResources(cn, pst, null);
     }
   }
 
@@ -471,7 +466,6 @@ public class MetodosDAO {
       pst.close();
     if (cn != null) {
       cn.setAutoCommit(true); // Restaurar auto-commit
-      cn.close();
     }
   }
 
@@ -486,6 +480,30 @@ public class MetodosDAO {
     } catch (SQLException e) {
       e.printStackTrace();
       throw e;
+    }
+  }
+
+  public void addCopia(Libro libro) {
+    String sql = "UPDATE libros SET saldo = saldo + 1 WHERE ISBN = ?";
+    try (Connection cn = Conexion.Conectar();
+        PreparedStatement pst = cn.prepareStatement(sql)) {
+      pst.setString(1, libro.getISBN());
+      pst.execute();
+      System.out.println("Copia agregada");
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void removeCopia(Libro libro) {
+    String sql = "UPDATE libros SET saldo = saldo - 1 WHERE ISBN = ?";
+    try (Connection cn = Conexion.Conectar();
+        PreparedStatement pst = cn.prepareStatement(sql)) {
+      pst.setString(1, libro.getISBN());
+      pst.execute();
+      System.out.println("Copia eliminada");
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
   }
 

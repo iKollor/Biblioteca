@@ -4,8 +4,11 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -22,9 +25,7 @@ import model.Autor;
 import model.Libro;
 import model.Prestamo;
 import model.Usuario;
-import model.db.MetodosDAO;
 import model.interfaces.Estado;
-import model.utils.AutorItem;
 import view.HomeView;
 import view.components.LibroCard;
 import view.panels.AddAutorPanel;
@@ -37,7 +38,7 @@ import view.utils.fonts.SFProFont;
 public class HomeController implements ActionListener {
 
   public enum Panel {
-    CATALOGO, PRESTAMOS, USUARIOS, ADD_LIBRO, ADD_AUTOR, LIBRO_INFO, USUARIO_INFO
+    CATALOGO, PRESTAMOS, ADD_LIBRO, ADD_AUTOR, LIBRO_INFO
   }
 
   HomeView homeView;
@@ -51,7 +52,6 @@ public class HomeController implements ActionListener {
   PrestamosPanel prestamosView = null;
 
   Panel currentPanel = null;
-
   BibliotecaServicio service;
 
   public HomeController(HomeView homeView, AppController controller) {
@@ -64,12 +64,7 @@ public class HomeController implements ActionListener {
 
     actualizarSidebar(user);
 
-    homeView.getSidebar().getBtnCatalogo().addActionListener(this);
-    homeView.getSidebar().getBtnPrestamos().addActionListener(this);
-    homeView.getSidebar().getBtnUsuarios().addActionListener(this);
-    homeView.getSidebar().getBtnAddLibro().addActionListener(this);
-    homeView.getSidebar().getBtnAddAutor().addActionListener(this);
-    homeView.getSidebar().getBtnLogout().addActionListener(this);
+    homeView.getSidebar().setListeners(this);
   }
 
   public void actualizarSidebar(Usuario user) {
@@ -130,11 +125,10 @@ public class HomeController implements ActionListener {
         break;
       case PRESTAMOS:
         if (prestamosView == null) {
-          prestamosView = new PrestamosPanel();
+          prestamosView = new PrestamosPanel(user);
           List<Prestamo> prestamos = user == null ? service.getPrestamos() : service.getPrestamos(user);
           System.out.println(prestamos);
           prestamosView.setPrestamosData(prestamos);
-          prestamosView.setAdmin(user == null);
           prestamosView.getBtnDevolver().addActionListener(this);
           prestamosView.getBtnClearPrestamos().addActionListener(this);
           // Habilitar el botón de devolver cuando se seleccione una fila y el prestamo no
@@ -156,7 +150,6 @@ public class HomeController implements ActionListener {
         }
         homeView.switchPanel("PRESTAMOS");
         break;
-      // TODO: Agregar casos para otros paneles
       default:
         throw new IllegalArgumentException("Panel no encontrado");
     }
@@ -216,6 +209,8 @@ public class HomeController implements ActionListener {
     if (libroView == null) {
       libroView = new LibroPanel(libroCard, user);
       libroView.getLibroCard().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
+      // agregar listeners
       libroView.getBtnPrestar().addActionListener(this);
       libroView.getBtnDevolver().addActionListener(this);
       libroView.getBtnAddCopia().addActionListener(this);
@@ -227,9 +222,7 @@ public class HomeController implements ActionListener {
     homeView.switchPanel("LIBRO_INFO");
   }
 
-  private void autoCompleteForm(int ISBN) {
-    MetodosDAO dao = controller.getDao();
-    BibliotecaServicio service = new BibliotecaServicio(dao);
+  private void autoCompleteForm(String ISBN) {
     Libro libro = service.getLibro(ISBN);
     addLibroView.autoCompleteForm(libro);
   }
@@ -243,8 +236,6 @@ public class HomeController implements ActionListener {
       showPanel(Panel.CATALOGO);
     } else if (source == homeView.getSidebar().getBtnPrestamos()) {
       showPanel(Panel.PRESTAMOS);
-    } else if (source == homeView.getSidebar().getBtnUsuarios()) {
-      showPanel(Panel.USUARIOS);
     } else if (source == homeView.getSidebar().getBtnAddLibro()) {
       showPanel(Panel.ADD_LIBRO);
     } else if (source == homeView.getSidebar().getBtnAddAutor()) {
@@ -252,6 +243,7 @@ public class HomeController implements ActionListener {
     } else if (source == homeView.getSidebar().getBtnLogout()) {
       controller.setUser(null);
       controller.showView(AppController.ViewType.LOGIN);
+
     } else if (addLibroView != null && source == addLibroView.getBtnAddLibro()) {
       Libro libro = getLibroForm();
       addLibro(libro);
@@ -263,34 +255,98 @@ public class HomeController implements ActionListener {
     if (libroView != null) {
       if (source == libroView.getBtnPrestar()) {
         // Lógica para manejar el botón de prestar
-        // TODO addPrestamo();
+        addPrestamo();
       } else if (source == libroView.getBtnDevolver()) {
         // Lógica para manejar el botón de devolver
-        // TODO devolverPrestamo();
+        devolverPrestamo();
+      } else if (source == libroView.getBtnAddCopia()) {
+        addCopia();
+      } else if (source == libroView.getBtnRemoveCopia()) {
+        removeCopia();
       }
     }
 
     if (prestamosView != null) {
       if (source == prestamosView.getBtnDevolver()) {
-        // TODO devolverPrestamo();
+        devolverPrestamo();
       } else if (source == prestamosView.getBtnClearPrestamos()) {
         clearPrestamos();
       }
     }
   }
 
+  private void removeCopia() {
+    Libro libro = libroView.getLibroCard().getLibro();
+    service.removeCopia(libro);
+    showPanel(Panel.CATALOGO);
+  }
+
+  private void addCopia() {
+    Libro libro = libroView.getLibroCard().getLibro();
+    service.addCopia(libro);
+    showPanel(Panel.CATALOGO);
+  }
+
+  private void devolverPrestamo() {
+    Prestamo prestamo = prestamosView.getPrestamosList().get(prestamosView.getTable().getSelectedRow());
+    prestamo.setFechaDevolucion(getCurrentTimestamp());
+    service.devolucion(prestamo);
+    List<String> librosPrestados = new ArrayList<>(user.getLibrosPrestados());
+    librosPrestados.removeIf(isbn -> isbn.equals(prestamo.getLibro().getISBN()));
+    user.setLibrosPrestados(librosPrestados);
+    prestamosView.setPrestamosData(service.getPrestamos(user));
+    prestamosView.updateTableView();
+    homeView.updateVisiblePanel();
+  }
+
+  private void addPrestamo() {
+
+    if (libroView.getLibroCard().getLibro().getSaldo() <= 0) {
+      JOptionPane.showMessageDialog(homeView, "No hay copias disponibles", "Error al agregar prestamo",
+          JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    if (user == null) {
+      JOptionPane.showMessageDialog(homeView, "Los administradores no pueden prestar libros",
+          "Error al agregar prestamo", JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    if (user.puedePrestar() == false) {
+      JOptionPane.showMessageDialog(homeView,
+          "No puedes prestar más libros, el máximo de libros que puedes prestar es: " + user.MAX_LIBROS_PRESTADOS,
+          "Error al agregar prestamo",
+          JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    Prestamo prestamo = new Prestamo();
+    prestamo.setLibro(libroView.getLibroCard().getLibro());
+    prestamo.setUsuario(user);
+    prestamo.setFechaPrestamo(getCurrentTimestamp());
+    service.addPrestamo(prestamo);
+    // Añadir libros prestados al array de libros prestados del usuario
+    List<String> librosPrestados = new ArrayList<>(user.getLibrosPrestados());
+    librosPrestados.add(prestamo.getLibro().getISBN());
+    user.setLibrosPrestados(librosPrestados);
+    showPanel(Panel.CATALOGO);
+  }
+
+  private Timestamp getCurrentTimestamp() {
+    LocalDateTime now = LocalDateTime.now();
+    return Timestamp.valueOf(now);
+  }
+
   private void clearPrestamos() {
-    MetodosDAO dao = controller.getDao();
-    BibliotecaServicio service = new BibliotecaServicio(dao);
     service.clearPrestamos(user.getId());
+    // Actualizar la tabla de prestamos
     prestamosView.setPrestamosData(service.getPrestamos(user));
     prestamosView.updateTableView();
     homeView.updateVisiblePanel();
   }
 
   private void addAutor(Autor autor) {
-    MetodosDAO dao = controller.getDao();
-    BibliotecaServicio service = new BibliotecaServicio(dao);
     service.addAutor(autor);
     addAutorView.clearForm();
   }
@@ -308,22 +364,24 @@ public class HomeController implements ActionListener {
 
   private Libro getLibroForm() {
     try {
+      if (addLibroView == null)
+        return null;
       Libro libro = new Libro();
       libro.setTitulo(addLibroView.getTxtTitulo().getText());
       libro.setAnioPublicacion(Year.parse(addLibroView.getTxtYear().getText()));
-      libro.setISBN(Integer.parseInt(addLibroView.getTxtISBN().getText()));
+      libro.setISBN(addLibroView.getTxtISBN().getText());
       libro.setPaginas(Integer.parseInt(addLibroView.getTxtPaginas().getText()));
       libro.setEdicion(Integer.parseInt(addLibroView.getTxtEdicion().getText()));
       libro.setAutor(addLibroView.getSelectedAutor());
       return libro;
     } catch (Exception e) {
+      JOptionPane.showMessageDialog(homeView, "Error al agregar libro: " + e.getMessage(), "Error",
+          JOptionPane.ERROR_MESSAGE);
       return null;
     }
   }
 
   private void addLibro(Libro libro) {
-    MetodosDAO dao = controller.getDao();
-    BibliotecaServicio service = new BibliotecaServicio(dao);
     service.addLibro(libro);
     addLibroView.clearForm();
   }
@@ -345,10 +403,9 @@ public class HomeController implements ActionListener {
       }
 
       private void checkISBN() {
-        String text = addLibroView.getTxtISBN().getText();
-        if (text.length() >= 10) {
+        String isbn = addLibroView.getTxtISBN().getText();
+        if (isbn.length() >= 10) {
           try {
-            int isbn = Integer.parseInt(text);
             if (service.isLibroRegistrado(isbn)) {
               JOptionPane.showMessageDialog(homeView, "El libro ya está registrado!");
               autoCompleteForm(isbn);

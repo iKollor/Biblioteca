@@ -10,7 +10,7 @@ public class Estudiante extends Usuario {
   }
 
   public Estudiante(String nombre, String apellido, String email, char[] password, String dni,
-      List<Libro> librosPrestados, String carrera, int id) {
+      List<String> librosPrestados, String carrera, int id) {
     super(nombre, apellido, email, password, dni, librosPrestados, id);
     this.carrera = carrera;
   }

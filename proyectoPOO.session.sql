@@ -13,15 +13,8 @@ CREATE TABLE libros (
     year YEAR,
     edition INT,
     pages INT,
+    saldo INT,
     FOREIGN KEY (autor_id) REFERENCES autores(id)
-);
-
--- Creación de la tabla 'copias_libro'
-CREATE TABLE copias_libro (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    libro_ISBN INT,
-    estado VARCHAR(50),
-    FOREIGN KEY (libro_ISBN) REFERENCES libros(ISBN)
 );
 
 -- Creación de la tabla 'usuarios'

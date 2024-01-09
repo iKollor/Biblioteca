@@ -12,13 +12,14 @@ public abstract class Usuario {
   private char[] password;
   private String dni;
 
-  List<Libro> librosPrestados;
+  List<String> librosPrestados;
+  // [1234551236, 1231224, 123123412, 125412341] ISBN Libros
 
   public Usuario() {
   }
 
   public Usuario(String nombre, String apellido, String email, char[] password, String dni,
-      List<Libro> librosPrestados, int id) {
+      List<String> librosPrestados, int id) {
     this.nombre = nombre;
     this.apellido = apellido;
     this.email = email;
@@ -76,11 +77,11 @@ public abstract class Usuario {
     this.dni = dni;
   }
 
-  public List<Libro> getLibrosPrestados() {
+  public List<String> getLibrosPrestados() {
     return librosPrestados;
   }
 
-  public void setLibrosPrestados(List<Libro> librosPrestados) {
+  public void setLibrosPrestados(List<String> librosPrestados) {
     this.librosPrestados = librosPrestados;
   }
 
@@ -89,13 +90,4 @@ public abstract class Usuario {
     return librosPrestados.size() < MAX_LIBROS_PRESTADOS;
   }
 
-  public void prestarLibro(Libro libro) {
-    librosPrestados.add(libro);
-    System.out.println("Libro prestado: " + libro);
-  }
-
-  public void devolverLibro(Libro libro) {
-    librosPrestados.remove(libro);
-    System.out.println("Libro devuelto: " + libro);
-  }
 }

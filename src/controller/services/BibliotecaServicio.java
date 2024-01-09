@@ -60,7 +60,7 @@ public class BibliotecaServicio {
     }
   }
 
-  public boolean isLibroRegistrado(int isbn) {
+  public boolean isLibroRegistrado(String isbn) {
     try {
       return dao.isLibroRegistrado(isbn);
     } catch (Exception e) {
@@ -70,7 +70,7 @@ public class BibliotecaServicio {
     return false;
   }
 
-  public Libro getLibro(int iSBN) {
+  public Libro getLibro(String iSBN) {
     try {
       return dao.getLibro(iSBN);
     } catch (Exception e) {
@@ -82,7 +82,7 @@ public class BibliotecaServicio {
 
   public void addAutor(Autor autor) {
     try {
-      dao.getAutor(autor);
+      dao.addAutor(autor);
       JOptionPane.showMessageDialog(null, "Autor agregado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error al agregar autor: " + e.getMessage(), "Error",
@@ -144,6 +144,26 @@ public class BibliotecaServicio {
           JOptionPane.INFORMATION_MESSAGE);
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error al eliminar prestamos: " + e.getMessage(), "Error",
+          JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  public void addCopia(Libro libro) {
+    try {
+      dao.addCopia(libro);
+      JOptionPane.showMessageDialog(null, "Copia agregada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error al agregar copia: " + e.getMessage(), "Error",
+          JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  public void removeCopia(Libro libro) {
+    try {
+      dao.removeCopia(libro);
+      JOptionPane.showMessageDialog(null, "Copia eliminada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error al eliminar copia: " + e.getMessage(), "Error",
           JOptionPane.ERROR_MESSAGE);
     }
   }

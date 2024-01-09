@@ -1,16 +1,16 @@
 package model;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
 public class Prestamo {
   private int id;
   private Libro libro;
   private Usuario usuario;
-  private LocalDate fechaPrestamo;
-  private LocalDate fechaDevolucion;
+  private Timestamp fechaPrestamo;
+  private Timestamp fechaDevolucion;
   private boolean devuelto;
 
-  public Prestamo(int id, Libro libro, Usuario usuario, LocalDate fechaPrestamo, LocalDate fechaDevolucion,
+  public Prestamo(int id, Libro libro, Usuario usuario, Timestamp fechaPrestamo, Timestamp fechaDevolucion,
       boolean devuelto) {
     this.id = id;
     this.libro = libro;
@@ -44,19 +44,19 @@ public class Prestamo {
     this.libro = libro;
   }
 
-  public LocalDate getFechaPrestamo() {
+  public Timestamp getFechaPrestamo() {
     return fechaPrestamo;
   }
 
-  public void setFechaPrestamo(LocalDate fechaPrestamo) {
+  public void setFechaPrestamo(Timestamp fechaPrestamo) {
     this.fechaPrestamo = fechaPrestamo;
   }
 
-  public LocalDate getFechaDevolucion() {
+  public Timestamp getFechaDevolucion() {
     return fechaDevolucion;
   }
 
-  public void setFechaDevolucion(LocalDate fechaDevolucion) {
+  public void setFechaDevolucion(Timestamp fechaDevolucion) {
     this.fechaDevolucion = fechaDevolucion;
   }
 

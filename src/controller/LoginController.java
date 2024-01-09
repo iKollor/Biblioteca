@@ -35,35 +35,38 @@ public class LoginController implements MouseListener {
     ValidateForm validador = controller.getValidate();
 
     String usuario = loginView.getTxtUser().getText();
-    char[] password = loginView.getTxtPassword().getPassword();
+    String password = new String(loginView.getTxtPassword().getPassword());
 
-    if (usuario.equals("admin") && new String(password).equals("admin")) {
+    // Creación de usuario admin hardcodeado
+    if (usuario.equals("admin") && password.equals("admin")) {
       JOptionPane.showMessageDialog(null, "Bienvenido administrador");
-      // Actualizar el estado del usuario en HomeView
-      controller.setUser(user);
-      controller.showView(AppController.ViewType.HOME);
     } else if (validador.validateLoginForm(usuario, password)) {
       try {
-        user = dao.authLogin(usuario, new String(password));
+        user = dao.authLogin(usuario, password);
         System.out.println("Usuario: " + user);
         if (user != null) {
           JOptionPane.showMessageDialog(null, "Bienvenido " + user.getNombre(), "Bienvenido",
               JOptionPane.INFORMATION_MESSAGE);
-          // Actualizar el estado del usuario en HomeView
-          controller.setUser(user);
-          controller.showView(AppController.ViewType.HOME);
+
         } else {
           JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error",
               JOptionPane.ERROR_MESSAGE);
+          return;
         }
       } catch (Exception e) {
         JOptionPane.showMessageDialog(null, "Error al iniciar sesión, error desconocido", "Error",
             JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+        return;
       }
     } else {
       JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos, revise los campos", "Error",
           JOptionPane.ERROR_MESSAGE);
+      return;
     }
+    // Actualizar el estado del usuario en HomeView
+    controller.setUser(user);
+    controller.showView(AppController.ViewType.HOME);
   }
 
   @Override

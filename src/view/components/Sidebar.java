@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -14,7 +15,7 @@ import javax.swing.JPanel;
 
 public class Sidebar extends JPanel {
 
-  private JButton btnCatalogo, btnPrestamos, btnUsuarios, btnAddLibro, btnAddAutor, btnLogout;
+  private JButton btnCatalogo, btnPrestamos, btnAddLibro, btnAddAutor, btnLogout;
   private JPanel userInfoContainer, buttonsContainer;
 
   public Sidebar() {
@@ -42,7 +43,6 @@ public class Sidebar extends JPanel {
     // Botones
     btnCatalogo = new JButton("Catálogo");
     btnPrestamos = new JButton("Historial de Préstamos");
-    btnUsuarios = new JButton("Usuarios Registrados");
     btnAddLibro = new JButton("Agregar Libro");
     btnAddAutor = new JButton("Agregar Autor");
 
@@ -86,12 +86,20 @@ public class Sidebar extends JPanel {
     }
   }
 
+  public void setListeners(ActionListener listener) {
+    btnCatalogo.addActionListener(listener);
+    btnPrestamos.addActionListener(listener);
+    btnAddLibro.addActionListener(listener);
+    btnAddAutor.addActionListener(listener);
+    btnLogout.addActionListener(listener);
+  }
+
   public List<JButton> getBotonesUsuario() {
     return List.of(btnCatalogo, btnPrestamos);
   }
 
   public List<JButton> getBotonesAdmin() {
-    return List.of(btnCatalogo, btnPrestamos, btnUsuarios, btnAddLibro, btnAddAutor);
+    return List.of(btnCatalogo, btnPrestamos, btnAddLibro, btnAddAutor);
   }
 
   public JButton getBtnCatalogo() {
@@ -108,14 +116,6 @@ public class Sidebar extends JPanel {
 
   public void setBtnPrestamos(JButton btnPrestamos) {
     this.btnPrestamos = btnPrestamos;
-  }
-
-  public JButton getBtnUsuarios() {
-    return btnUsuarios;
-  }
-
-  public void setBtnUsuarios(JButton btnUsuarios) {
-    this.btnUsuarios = btnUsuarios;
   }
 
   public JButton getBtnAddLibro() {

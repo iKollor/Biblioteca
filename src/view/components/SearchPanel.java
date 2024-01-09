@@ -52,5 +52,4 @@ public class SearchPanel extends JPanel {
     return cmbEstadoSearch.getSelectedItem().toString();
   }
 
-  // TODO: Métodos adicionales según sea necesario
 }

@@ -77,4 +77,5 @@ public class LibroCard extends JPanel {
   public void setLibro(Libro libro) {
     this.libro = libro;
   }
+
 }

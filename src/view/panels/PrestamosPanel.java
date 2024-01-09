@@ -6,7 +6,6 @@ import java.awt.GridLayout;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 import controller.HomeController;
 import model.Prestamo;
+import model.Usuario;
 import view.utils.fonts.SFProFont;
 
 public class PrestamosPanel extends JPanel {
@@ -29,9 +29,10 @@ public class PrestamosPanel extends JPanel {
 
   private List<Prestamo> prestamosList;
 
-  private boolean isAdmin = false;
+  Usuario user;
 
-  public PrestamosPanel() {
+  public PrestamosPanel(Usuario user) {
+    this.user = user;
     setLayout(new BorderLayout());
     setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     setName(HomeController.Panel.PRESTAMOS.toString());
@@ -71,13 +72,14 @@ public class PrestamosPanel extends JPanel {
     bottomContainer = new JPanel(new GridLayout(1, 2, 10, 0));
     bottomContainer.add(btnDevolver);
     bottomContainer.add(btnClearPrestamos);
+
   }
 
   private void addComponents() {
     // Añadir componentes al panel
     add(topContainer, BorderLayout.NORTH);
     add(new JScrollPane(table), BorderLayout.CENTER); // Añadir la tabla dentro de un JScrollPane
-    if (!isAdmin)
+    if (user != null)
       add(bottomContainer, BorderLayout.SOUTH);
   }
 
@@ -143,11 +145,4 @@ public class PrestamosPanel extends JPanel {
     this.btnClearPrestamos = btnClearPrestamos;
   }
 
-  public boolean isAdmin() {
-    return isAdmin;
-  }
-
-  public void setAdmin(boolean isAdmin) {
-    this.isAdmin = isAdmin;
-  }
 }

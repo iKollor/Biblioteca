@@ -32,9 +32,9 @@ public class ValidateForm {
    * @param password La contraseña a validar
    * @return true si la contraseña cumple con los criterios, false de lo contrario
    */
-  public static boolean validatePassword(char[] password) {
-    return password.length >= 8
-        && new String(password).matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$");
+  public static boolean validatePassword(String password) {
+    return password.length() >= 8
+        && password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$");
   }
 
   /**
@@ -73,7 +73,7 @@ public class ValidateForm {
    * @return true si el apellido es válido, false de lo contrario
    */
   public static boolean validateLastName(String lastName) {
-    return lastName.matches("^[a-zA-Z ]{2,30}$");
+    return lastName.matches("^[a-zA-ZáéíóúÁÉÍÓÚ ]{2,30}$");
   }
 
   /**
@@ -85,7 +85,7 @@ public class ValidateForm {
    * @return true si el número de ISBN es válido, false de lo contrario
    */
   public static boolean validateISBN(String ISBN) {
-    return ISBN.matches("^[0-9]{13}$");
+    return ISBN.matches("^[0-9]{10}$");
   }
 
   /**
@@ -98,7 +98,7 @@ public class ValidateForm {
    * @return true si el título es válido, false de lo contrario
    */
   public static boolean validateTitle(String title) {
-    return title.matches("^[a-zA-Z0-9 ]{2,30}$");
+    return title.matches("^[a-zA-ZáéíóúÁÉÍÓÚ0-9 ]{2,30}$");
   }
 
   /**
@@ -111,7 +111,7 @@ public class ValidateForm {
    * @return true si el autor es válido, false de lo contrario
    */
   public static boolean validateAuthor(String author) {
-    return author.matches("^[a-zA-Z ]{2,30}$");
+    return author.matches("^[a-zA-ZáéíóúÁÉÍÓÚ ]{2,30}$");
   }
 
   /**
@@ -173,7 +173,7 @@ public class ValidateForm {
    */
   public boolean validateRegisterForm(Usuario user) {
     return validateName(user.getNombre()) && validateLastName(user.getApellido()) && validateDNI(user.getDni())
-        && validateEmail(user.getEmail()) && validatePassword(user.getPassword());
+        && validateEmail(user.getEmail()) && validatePassword(new String(user.getPassword()));
   }
 
   /**
@@ -183,7 +183,7 @@ public class ValidateForm {
    * @param password la contraseña a validar
    * @return true si todos los campos son válidos, false de lo contrario
    */
-  public boolean validateLoginForm(String email, char[] password) {
+  public boolean validateLoginForm(String email, String password) {
     return validateEmail(email) && validatePassword(password);
   }
 

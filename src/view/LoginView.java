@@ -19,13 +19,13 @@ import view.utils.fonts.SFProFont;
 
 public class LoginView extends JFrame {
 
-  public JLabel lblRegister, lblTitulo;
+  private JLabel lblRegister, lblTitulo;
 
   // Estos van a tener eventos asociados, asi que creamos los métodos de acceso
-  public JTextField txtUser;
-  public JPasswordField txtPassword;
-  public JButton btnLogin;
-  public JLabel lblRegisterLink;
+  private JTextField txtUser;
+  private JPasswordField txtPassword;
+  private JButton btnLogin;
+  private JLabel lblRegisterLink;
 
   public JTextField getTxtUser() {
     return txtUser;
