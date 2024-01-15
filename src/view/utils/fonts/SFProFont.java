@@ -16,17 +16,21 @@ public class SFProFont {
 
   public static void registerFonts() {
     try {
-      Font sfProRegular = Font.createFont(Font.TRUETYPE_FONT, new File("src/view/utils/fonts/SF-Pro-Text-Regular.otf"))
-          .deriveFont(14f);
-      Font sfProBold = Font.createFont(Font.TRUETYPE_FONT, new File("src/view/utils/fonts/SF-Pro-Text-Bold.otf"))
-          .deriveFont(14f);
-      Font sfProMedium = Font.createFont(Font.TRUETYPE_FONT, new File("src/view/utils/fonts/SF-Pro-Text-Medium.otf"))
-          .deriveFont(14f);
+      Font sfProRegular = Font
+          .createFont(Font.TRUETYPE_FONT, new File("src/view/utils/fonts/SF-Pro-Text-Regular.otf"))
+          .deriveFont(8f);
+      Font sfProBold =
+          Font.createFont(Font.TRUETYPE_FONT, new File("src/view/utils/fonts/SF-Pro-Text-Bold.otf"))
+              .deriveFont(8f);
+      Font sfProMedium = Font
+          .createFont(Font.TRUETYPE_FONT, new File("src/view/utils/fonts/SF-Pro-Text-Medium.otf"))
+          .deriveFont(8f);
       Font sfProSemibold = Font
           .createFont(Font.TRUETYPE_FONT, new File("src/view/utils/fonts/SF-Pro-Text-Semibold.otf"))
-          .deriveFont(14f);
-      Font sfProLight = Font.createFont(Font.TRUETYPE_FONT, new File("src/view/utils/fonts/SF-Pro-Text-Light.otf"))
-          .deriveFont(14f);
+          .deriveFont(8f);
+      Font sfProLight = Font
+          .createFont(Font.TRUETYPE_FONT, new File("src/view/utils/fonts/SF-Pro-Text-Light.otf"))
+          .deriveFont(8f);
 
       GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
       ge.registerFont(sfProRegular);

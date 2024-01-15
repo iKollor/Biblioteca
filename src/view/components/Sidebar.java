@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -18,10 +19,10 @@ public class Sidebar extends JPanel {
   private JButton btnCatalogo, btnPrestamos, btnAddLibro, btnAddAutor, btnLogout;
   private JPanel userInfoContainer, buttonsContainer;
 
-  
+
   public Sidebar() {
     setLayout(new BorderLayout());
-    setPreferredSize(new Dimension(160, 600));
+    setPreferredSize(new Dimension(200, 600));
     setBackground(new Color(54, 51, 77));
     setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(84, 81, 127)));
 
@@ -33,13 +34,13 @@ public class Sidebar extends JPanel {
     // Contenedor de información de usuario
     userInfoContainer = new JPanel();
     userInfoContainer.setBackground(new Color(84, 81, 127));
-    userInfoContainer.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+    userInfoContainer.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
     userInfoContainer.setLayout(new FlowLayout(FlowLayout.CENTER));
 
     // Contenedor de botones
     buttonsContainer = new JPanel();
     buttonsContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-    buttonsContainer.setPreferredSize(new Dimension(160, 400));
+    buttonsContainer.setPreferredSize(new Dimension(200, 400));
 
     // Botones
     btnCatalogo = new JButton("Catálogo");
@@ -59,7 +60,7 @@ public class Sidebar extends JPanel {
   }
 
   private void setButtonProperties(JButton boton) {
-    boton.setPreferredSize(new Dimension(160, 50));
+    boton.setPreferredSize(new Dimension(200, 50));
     boton.setBackground(null);
     boton.setForeground(Color.WHITE);
     boton.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -96,11 +97,19 @@ public class Sidebar extends JPanel {
   }
 
   public List<JButton> getBotonesUsuario() {
-    return List.of(btnCatalogo, btnPrestamos);
+    List<JButton> botones = new ArrayList<>();
+    botones.add(btnCatalogo);
+    botones.add(btnPrestamos);
+    return botones;
   }
 
   public List<JButton> getBotonesAdmin() {
-    return List.of(btnCatalogo, btnPrestamos, btnAddLibro, btnAddAutor);
+    List<JButton> botones = new ArrayList<>();
+    botones.add(btnCatalogo);
+    botones.add(btnPrestamos);
+    botones.add(btnAddLibro);
+    botones.add(btnAddAutor);
+    return botones;
   }
 
   public JButton getBtnCatalogo() {

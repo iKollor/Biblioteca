@@ -43,7 +43,7 @@ public class AddLibroPanel extends JPanel {
     northContainer = new JPanel(new FlowLayout(FlowLayout.LEFT));
     northContainer.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
     JLabel lblTitle = new JLabel("Agregar libro", JLabel.LEFT);
-    lblTitle.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 32));
+    lblTitle.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 22));
     northContainer.add(lblTitle);
 
     // CENTER
@@ -52,29 +52,29 @@ public class AddLibroPanel extends JPanel {
 
     txtTitulo = new PHTextField(20);
     txtTitulo.setPlaceholder("Título");
-    txtTitulo.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 22));
+    txtTitulo.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 10));
 
     comboAutores = new JComboBox<>();
-    comboAutores.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 22));
+    comboAutores.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 10));
 
     txtYear = new PHTextField(20);
     txtYear.setPlaceholder("Año");
-    txtYear.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 22));
+    txtYear.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 10));
 
     txtISBN = new PHTextField(20);
     txtISBN.setPlaceholder("ISBN (Estándar Internacional de Libros)");
-    txtISBN.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 22));
+    txtISBN.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 10));
 
     txtPaginas = new PHTextField(20);
     txtPaginas.setPlaceholder("Páginas");
-    txtPaginas.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 22));
+    txtPaginas.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 10));
 
     txtEdicion = new PHTextField(20);
     txtEdicion.setPlaceholder("Edición");
-    txtEdicion.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 22));
+    txtEdicion.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 10));
 
     btnAddLibro = new JButton("Añadir Libro");
-    btnAddLibro.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 22));
+    btnAddLibro.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 10));
     btnAddLibro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
     formContainer.add(txtISBN);

@@ -36,7 +36,7 @@ public class AddAutorPanel extends JPanel {
     northContainer = new JPanel(new FlowLayout(FlowLayout.LEFT));
     northContainer.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
     JLabel lblTitle = new JLabel("Agregar autor", JLabel.LEFT);
-    lblTitle.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 32));
+    lblTitle.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 22));
     northContainer.add(lblTitle);
 
     // CENTER
@@ -45,11 +45,11 @@ public class AddAutorPanel extends JPanel {
 
     txtNombre = new PHTextField(20);
     txtNombre.setPlaceholder("Nombre");
-    txtNombre.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 22));
+    txtNombre.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 18));
 
     txtNacionalidad = new PHTextField(20);
     txtNacionalidad.setPlaceholder("Nacionalidad");
-    txtNacionalidad.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 22));
+    txtNacionalidad.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 18));
 
     btnAddAutor = new JButton("Agregar autor");
     btnAddAutor.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 22));

@@ -33,10 +33,10 @@ public class LibroCard extends JPanel {
     // TODO: Mostrar la imagen del libro
     lblTituloLibro = new JLabel("<html><center><b>" + libro.getTitulo() + "</b></center></html>",
         SwingConstants.CENTER);
-    lblTituloLibro.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 24));
+    lblTituloLibro.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 15));
 
     lblEstado = new JLabel(estado.toString(), SwingConstants.CENTER);
-    lblEstado.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 14));
+    lblEstado.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 8));
 
     if (estado == Estado.DISPONIBLE) {
       lblEstado.setForeground(new Color(114, 241, 184));

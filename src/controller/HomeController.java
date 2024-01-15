@@ -73,7 +73,7 @@ public class HomeController implements ActionListener {
     String userNombre =
         user == null ? "Administrador" : user.getNombre() + " " + user.getApellido();
     JLabel lblNombre = new JLabel(userNombre, SwingConstants.CENTER);
-    lblNombre.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 18));
+    lblNombre.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 10));
     userInfoContainer.add(lblNombre);
 
     // Actualizar ButtonsContainer

@@ -65,32 +65,32 @@ public class LibroPanel extends JPanel {
     String TituloString =
         String.format("<html><div WIDTH=%d>%s</div></html>", 300, libro.getTitulo());
     lblTitulo = new JLabel(TituloString, SwingConstants.LEFT);
-    lblTitulo.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 36));
+    lblTitulo.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 22));
 
     JPanel container = new JPanel(new GridLayout(0, 1, 5, 5));
 
     lblAutor = new JLabel(libro.getAutor().getNombre(), SwingConstants.LEFT);
-    lblAutor.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 16));
+    lblAutor.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 8));
 
     lblAnioPublicacion = new JLabel(
         "<html><b>Año de Publicación: </b>" + libro.getAnioPublicacion().toString() + "</html>",
         SwingConstants.LEFT);
-    lblAnioPublicacion.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 16));
+    lblAnioPublicacion.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 8));
 
     lblEdicion =
         new JLabel(String.valueOf("<html><b>Edición: </b>" + libro.getEdicion() + "</html>"),
             SwingConstants.LEFT);
-    lblEdicion.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 16));
+    lblEdicion.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 8));
 
     lblPaginas =
         new JLabel(String.valueOf("<html><b>No. de Paginas: </b>" + libro.getPaginas() + "</html>"),
             SwingConstants.LEFT);
-    lblPaginas.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 16));
+    lblPaginas.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 8));
 
     lblSaldo =
         new JLabel(String.valueOf("<html><b>No. de Copias: </b>" + libro.getSaldo() + "</html>"),
             SwingConstants.LEFT);
-    lblSaldo.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 16));
+    lblSaldo.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 8));
 
     container.add(lblAutor);
     container.add(lblAnioPublicacion);

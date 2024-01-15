@@ -23,7 +23,7 @@ public class PHTextField extends JTextField {
       hints = null;
     }
   }
-  private static final float FONT_SIZE_RATIO = 0.3f; // Adjust this ratio as needed
+  private static final float FONT_SIZE_RATIO = 0.2f; // Adjust this ratio as needed
 
   private String placeholder;
 

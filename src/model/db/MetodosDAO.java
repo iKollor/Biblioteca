@@ -10,16 +10,12 @@ import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import controller.services.BibliotecaServicio.Estado;
 import model.Autor;
 import model.Estudiante;
 import model.Libro;
 import model.Prestamo;
 import model.Usuario;
-import view.utils.Loader;
 
 public class MetodosDAO {
 
@@ -39,8 +35,6 @@ public class MetodosDAO {
   private static final String COL_AUTOR_NACIONALIDAD = "nacionalidad";
 
   protected static final SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-
-  private static Loader loader = new Loader();
 
   public boolean Register(Usuario user) throws SQLException {
     try (Connection cn = Conexion.Conectar();
@@ -80,7 +74,8 @@ public class MetodosDAO {
         System.out.println("Usuario encontrado: " + user.getNombre() + " " + user.getApellido());
         // obtener libros prestados
         List<Prestamo> prestamos =
-            getPrestamos(user).stream().filter(prestamo -> !prestamo.isDevuelto()).toList();
+            getPrestamos(user).stream().filter(prestamo -> !prestamo.isDevuelto())
+                .collect(java.util.stream.Collectors.toList());
 
         System.out.println("Prestamos del usuario que no han sido devueltos: " + prestamos);
 
@@ -89,7 +84,8 @@ public class MetodosDAO {
           System.out.println("Registro encontrado: " + prestamo.getLibro().getTitulo());
           librosPrestados.add(prestamo.getLibro());
         }
-        user.setLibrosPrestados(librosPrestados.stream().map(libro -> libro.getISBN()).toList());
+        user.setLibrosPrestados(librosPrestados.stream().map(libro -> libro.getISBN())
+            .collect(java.util.stream.Collectors.toList()));
         System.out.println("Libros prestados del usuario: " + librosPrestados);
         return user;
       }

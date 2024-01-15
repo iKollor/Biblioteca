@@ -74,7 +74,7 @@ public class RegistroView extends JFrame {
 
   public void initComponents() {
     lblTitulo = new JLabel("Registro de usuario", SwingConstants.CENTER);
-    lblTitulo.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 24));
+    lblTitulo.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 16));
 
     txtNombre = new JTextField();
     txtNombre.setToolTipText("Nombre");
