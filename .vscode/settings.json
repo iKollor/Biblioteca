@@ -1,10 +1,7 @@
 {
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
-    "java.project.referencedLibraries": {
-        "include": ["lib/**/*.jar", "c:\\Users\\isai_\\Downloads\\mysql-connector-j-8.2.0.jar"],
-        "exclude": ["lib/mysql-connector-j-8.2.0.jar"]
-    },
+    "java.project.referencedLibraries": ["lib/**/*.jar"],
     "cSpell.words": ["anio", "boton", "devolucion", "edicion", "Edicion", "exito", "isbn", "Metodos", "Prestable", "prestamo", "Prestamo", "proyectopoo", "Publicacion", "Refactorizacón", "Sesion", "transaccion"],
     "sqltools.connections": [
         {
