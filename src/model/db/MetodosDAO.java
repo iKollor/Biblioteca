@@ -10,16 +10,13 @@ import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
+
 import controller.services.BibliotecaServicio.Estado;
 import model.Autor;
 import model.Estudiante;
 import model.Libro;
 import model.Prestamo;
 import model.Usuario;
-import view.utils.Loader;
 
 public class MetodosDAO {
 
@@ -39,8 +36,6 @@ public class MetodosDAO {
   private static final String COL_AUTOR_NACIONALIDAD = "nacionalidad";
 
   protected static final SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-
-  private static Loader loader = new Loader();
 
   public boolean Register(Usuario user) throws SQLException {
     try (Connection cn = Conexion.Conectar();
