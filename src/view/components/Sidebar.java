@@ -18,6 +18,7 @@ public class Sidebar extends JPanel {
   private JButton btnCatalogo, btnPrestamos, btnAddLibro, btnAddAutor, btnLogout;
   private JPanel userInfoContainer, buttonsContainer;
 
+  
   public Sidebar() {
     setLayout(new BorderLayout());
     setPreferredSize(new Dimension(160, 600));

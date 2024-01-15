@@ -1,17 +1,20 @@
 package view.components;
 
 import java.awt.FlowLayout;
-
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import controller.services.BibliotecaServicio.Estado;
 
 public class SearchPanel extends JPanel {
 
   private JTextField txtTituloSearch;
   private JTextField txtAutorSearch;
-  private JComboBox<String> cmbEstadoSearch;
+  private JComboBox<Estado> cmbEstadoSearch;
+  private JButton btnSearch;
+
 
   public SearchPanel() {
     setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -27,10 +30,10 @@ public class SearchPanel extends JPanel {
     txtAutorSearch.setToolTipText("Buscar por autor");
 
     JLabel lblEstadoSearch = new JLabel("Estado: ");
-    cmbEstadoSearch = new JComboBox<String>();
-    cmbEstadoSearch.addItem("Todos");
-    cmbEstadoSearch.addItem("Disponible");
-    cmbEstadoSearch.addItem("Agotado");
+    cmbEstadoSearch = new JComboBox<Estado>(Estado.values());
+    cmbEstadoSearch.setSelectedItem(Estado.TODOS);
+
+    btnSearch = new JButton("Buscar");
 
     add(lblSearch);
     add(txtTituloSearch);
@@ -38,6 +41,7 @@ public class SearchPanel extends JPanel {
     add(txtAutorSearch);
     add(lblEstadoSearch);
     add(cmbEstadoSearch);
+    add(btnSearch);
   }
 
   public String getSearchText() {
@@ -48,8 +52,12 @@ public class SearchPanel extends JPanel {
     return txtAutorSearch.getText();
   }
 
-  public String getEstadoSearch() {
-    return cmbEstadoSearch.getSelectedItem().toString();
+  public Estado getEstadoSearch() {
+    return (Estado) cmbEstadoSearch.getSelectedItem();
+  }
+  
+  public JButton getBtnSearch() {
+    return btnSearch;
   }
 
 }

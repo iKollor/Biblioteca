@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -20,12 +19,12 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.PlainDocument;
 
 import controller.services.BibliotecaServicio;
+import controller.services.BibliotecaServicio.Estado;
 import controller.utils.IntFilter;
 import model.Autor;
 import model.Libro;
 import model.Prestamo;
 import model.Usuario;
-import model.interfaces.Estado;
 import view.HomeView;
 import view.components.LibroCard;
 import view.panels.AddAutorPanel;
@@ -41,18 +40,18 @@ public class HomeController implements ActionListener {
     CATALOGO, PRESTAMOS, ADD_LIBRO, ADD_AUTOR, LIBRO_INFO
   }
 
-  HomeView homeView;
-  AppController controller;
-  Usuario user;
+  private HomeView homeView;
+  private AppController controller;
+  private Usuario user;
 
-  CatalogPanel catalogoView = null;
-  LibroPanel libroView = null;
-  AddLibroPanel addLibroView = null;
-  AddAutorPanel addAutorView = null;
-  PrestamosPanel prestamosView = null;
+  private CatalogPanel catalogoView = null;
+  private LibroPanel libroView = null;
+  private AddLibroPanel addLibroView = null;
+  private AddAutorPanel addAutorView = null;
+  private PrestamosPanel prestamosView = null;
 
-  Panel currentPanel = null;
-  BibliotecaServicio service;
+  private Panel currentPanel = null;
+  private BibliotecaServicio service;
 
   public HomeController(HomeView homeView, AppController controller) {
     this.homeView = homeView;
@@ -71,7 +70,8 @@ public class HomeController implements ActionListener {
     // Actualizar UserInfoContainer
     JPanel userInfoContainer = homeView.getSidebar().getUserInfoContainer();
     userInfoContainer.removeAll();
-    String userNombre = user == null ? "Administrador" : user.getNombre() + " " + user.getApellido();
+    String userNombre =
+        user == null ? "Administrador" : user.getNombre() + " " + user.getApellido();
     JLabel lblNombre = new JLabel(userNombre, SwingConstants.CENTER);
     lblNombre.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 18));
     userInfoContainer.add(lblNombre);
@@ -98,6 +98,7 @@ public class HomeController implements ActionListener {
         catalogoView = new CatalogPanel();
         catalogoView.setLibroCard(libroCards);
         catalogoView.updateCards();
+        catalogoView.getSearchPanel().getBtnSearch().addActionListener(this);
         homeView.addPanel(catalogoView, "CATALOGO");
 
         homeView.switchPanel("CATALOGO");
@@ -126,7 +127,8 @@ public class HomeController implements ActionListener {
       case PRESTAMOS:
         if (prestamosView == null) {
           prestamosView = new PrestamosPanel(user);
-          List<Prestamo> prestamos = user == null ? service.getPrestamos() : service.getPrestamos(user);
+          List<Prestamo> prestamos =
+              user == null ? service.getPrestamos() : service.getPrestamos(user);
           System.out.println(prestamos);
           prestamosView.setPrestamosData(prestamos);
           prestamosView.getBtnDevolver().addActionListener(this);
@@ -197,7 +199,7 @@ public class HomeController implements ActionListener {
             return;
           System.out.println("Libro Mostrado: " + libroCard.getLibro().getTitulo());
           System.out.println("con estado: " + libroCard.getEstado());
-          showLibroInfo(libroCard); // Pasar libroCard en lugar de libro
+          showLibroInfo(libroCard);
         }
       });
       libroCards.add(libroCard);
@@ -209,6 +211,7 @@ public class HomeController implements ActionListener {
     if (libroView == null) {
       libroView = new LibroPanel(libroCard, user);
       libroView.getLibroCard().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+      libroView.getLibroCard().setToolTipText(null);
 
       // agregar listeners
       libroView.getBtnPrestar().addActionListener(this);
@@ -273,6 +276,22 @@ public class HomeController implements ActionListener {
         clearPrestamos();
       }
     }
+
+    if(catalogoView != null) {
+      if(source == catalogoView.getSearchPanel().getBtnSearch()) {
+        searchLibros();
+      }
+    }
+  }
+
+  private void searchLibros() {
+    String titulo = catalogoView.getSearchPanel().getSearchText();
+    String autor = catalogoView.getSearchPanel().getAutorSearchText();
+    Estado estado = catalogoView.getSearchPanel().getEstadoSearch();
+    List<Libro> libros = service.searchLibros(titulo, autor, estado);
+    List<LibroCard> libroCards = createCards(libros);
+    catalogoView.setLibroCard(libroCards);
+    catalogoView.updateCards();
   }
 
   private void removeCopia() {
@@ -288,7 +307,8 @@ public class HomeController implements ActionListener {
   }
 
   private void devolverPrestamo() {
-    Prestamo prestamo = prestamosView.getPrestamosList().get(prestamosView.getTable().getSelectedRow());
+    Prestamo prestamo =
+        prestamosView.getPrestamosList().get(prestamosView.getTable().getSelectedRow());
     prestamo.setFechaDevolucion(getCurrentTimestamp());
     service.devolucion(prestamo);
     List<String> librosPrestados = new ArrayList<>(user.getLibrosPrestados());
@@ -302,8 +322,8 @@ public class HomeController implements ActionListener {
   private void addPrestamo() {
 
     if (libroView.getLibroCard().getLibro().getSaldo() <= 0) {
-      JOptionPane.showMessageDialog(homeView, "No hay copias disponibles", "Error al agregar prestamo",
-          JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(homeView, "No hay copias disponibles",
+          "Error al agregar prestamo", JOptionPane.ERROR_MESSAGE);
       return;
     }
 
@@ -314,10 +334,11 @@ public class HomeController implements ActionListener {
     }
 
     if (user.puedePrestar() == false) {
-      JOptionPane.showMessageDialog(homeView,
-          "No puedes prestar más libros, el máximo de libros que puedes prestar es: " + user.MAX_LIBROS_PRESTADOS,
-          "Error al agregar prestamo",
-          JOptionPane.ERROR_MESSAGE);
+      JOptionPane
+          .showMessageDialog(homeView,
+              "No puedes prestar más libros, el máximo de libros que puedes prestar es: "
+                  + user.MAX_LIBROS_PRESTADOS,
+              "Error al agregar prestamo", JOptionPane.ERROR_MESSAGE);
       return;
     }
 

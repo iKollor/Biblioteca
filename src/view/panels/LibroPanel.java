@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import controller.HomeController;
+import controller.services.BibliotecaServicio.Estado;
 import model.Libro;
 import model.Usuario;
-import model.interfaces.Estado;
 import view.components.LibroCard;
 import view.utils.fonts.SFProFont;
 
@@ -62,7 +62,8 @@ public class LibroPanel extends JPanel {
     JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
     JPanel infoContainer = new JPanel(new GridLayout(0, 1, 5, 5));
 
-    String TituloString = String.format("<html><div WIDTH=%d>%s</div></html>", 300, libro.getTitulo());
+    String TituloString =
+        String.format("<html><div WIDTH=%d>%s</div></html>", 300, libro.getTitulo());
     lblTitulo = new JLabel(TituloString, SwingConstants.LEFT);
     lblTitulo.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 36));
 
@@ -76,16 +77,19 @@ public class LibroPanel extends JPanel {
         SwingConstants.LEFT);
     lblAnioPublicacion.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 16));
 
-    lblEdicion = new JLabel(String.valueOf("<html><b>Edición: </b>" + libro.getEdicion() + "</html>"),
-        SwingConstants.LEFT);
+    lblEdicion =
+        new JLabel(String.valueOf("<html><b>Edición: </b>" + libro.getEdicion() + "</html>"),
+            SwingConstants.LEFT);
     lblEdicion.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 16));
 
-    lblPaginas = new JLabel(String.valueOf("<html><b>No. de Paginas: </b>" + libro.getPaginas() + "</html>"),
-        SwingConstants.LEFT);
+    lblPaginas =
+        new JLabel(String.valueOf("<html><b>No. de Paginas: </b>" + libro.getPaginas() + "</html>"),
+            SwingConstants.LEFT);
     lblPaginas.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 16));
 
-    lblSaldo = new JLabel(String.valueOf("<html><b>No. de Copias: </b>" + libro.getSaldo() + "</html>"),
-        SwingConstants.LEFT);
+    lblSaldo =
+        new JLabel(String.valueOf("<html><b>No. de Copias: </b>" + libro.getSaldo() + "</html>"),
+            SwingConstants.LEFT);
     lblSaldo.setFont(new Font(SFProFont.SF_PRO_REGULAR, Font.PLAIN, 16));
 
     container.add(lblAutor);
@@ -111,18 +115,22 @@ public class LibroPanel extends JPanel {
     // Botones usuario
     btnPrestar = new JButton("Prestar");
     btnPrestar.setPreferredSize(new java.awt.Dimension(200, 80));
+    btnPrestar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     btnDevolver = new JButton("Devolver");
     btnDevolver.setPreferredSize(new java.awt.Dimension(200, 80));
+    btnDevolver.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-    btnPrestar.setEnabled(estado != Estado.PRESTADO);
+    btnPrestar.setEnabled(estado != Estado.AGOTADO);
     btnDevolver.setEnabled(estado != Estado.DISPONIBLE);
 
     // Botones admin
     btnAddCopia = new JButton("Agregar Copia");
     btnAddCopia.setPreferredSize(new java.awt.Dimension(200, 80));
+    btnAddCopia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     btnRemoveCopia = new JButton("Eliminar Copia");
     btnRemoveCopia.setPreferredSize(new java.awt.Dimension(200, 80));
-    btnRemoveCopia.setEnabled(estado.equals(Estado.AGOTADO));
+    btnRemoveCopia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+    btnRemoveCopia.setEnabled(!estado.equals(Estado.AGOTADO));
 
     if (user == null) {
       buttonsContainer.add(btnAddCopia);

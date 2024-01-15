@@ -5,18 +5,19 @@ import java.util.List;
 public abstract class Usuario {
   public final int MAX_LIBROS_PRESTADOS = 4;
 
-  private int id;
-  private String nombre;
-  private String apellido;
-  private String email;
-  private char[] password;
-  private String dni;
+  // la diferencia entre private y protected es que private solo puede ser accedido por la clase que
+  // lo contiene y protected puede ser accedido por las clases hijas y por las clases del mismo
+  // paquete (src/model)
+  protected int id;
+  protected String nombre;
+  protected String apellido;
+  protected String email;
+  protected char[] password;
+  protected String dni;
 
-  List<String> librosPrestados;
-  // [1234551236, 1231224, 123123412, 125412341] ISBN Libros
+  protected List<String> librosPrestados; // [1234551236, 1231224, 123123412, 125412341] ISBN Libros
 
-  public Usuario() {
-  }
+  public Usuario() {}
 
   public Usuario(String nombre, String apellido, String email, char[] password, String dni,
       List<String> librosPrestados, int id) {

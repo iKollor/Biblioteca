@@ -29,7 +29,7 @@ public class PrestamosPanel extends JPanel {
 
   private List<Prestamo> prestamosList;
 
-  Usuario user;
+  private Usuario user;
 
   public PrestamosPanel(Usuario user) {
     this.user = user;
@@ -49,8 +49,8 @@ public class PrestamosPanel extends JPanel {
     topContainer.add(lblTitulo, BorderLayout.WEST);
 
     // Modelo de tabla
-    String[] columnNames = { "ID", "Prestado por", "Título del Libro", "Fecha de Préstamo", "Fecha de Devolución",
-        "Devuelto" };
+    String[] columnNames = {"ID", "Prestado por", "Título del Libro", "Fecha de Préstamo",
+        "Fecha de Devolución", "Devuelto"};
     tableModel = new DefaultTableModel(columnNames, 0);
     table = new JTable(tableModel);
     table.setFillsViewportHeight(true);
@@ -93,14 +93,10 @@ public class PrestamosPanel extends JPanel {
   private void updateTableData() {
     tableModel.setRowCount(0); // Limpiar la tabla
     for (Prestamo prestamo : prestamosList) {
-      tableModel.addRow(new Object[] {
-          prestamo.getId(),
+      tableModel.addRow(new Object[] {prestamo.getId(),
           prestamo.getUsuario().getNombre() + " " + prestamo.getUsuario().getApellido(),
-          prestamo.getLibro().getTitulo(),
-          prestamo.getFechaPrestamo(),
-          prestamo.getFechaDevolucion(),
-          prestamo.isDevuelto() ? "Sí" : "No"
-      });
+          prestamo.getLibro().getTitulo(), prestamo.getFechaPrestamo(),
+          prestamo.getFechaDevolucion(), prestamo.isDevuelto() ? "Sí" : "No"});
     }
     tableModel.fireTableDataChanged();
     table.validate();

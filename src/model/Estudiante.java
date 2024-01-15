@@ -6,8 +6,7 @@ public class Estudiante extends Usuario {
 
   private String carrera;
 
-  public Estudiante() {
-  }
+  public Estudiante() {}
 
   public Estudiante(String nombre, String apellido, String email, char[] password, String dni,
       List<String> librosPrestados, String carrera, int id) {

@@ -20,12 +20,12 @@ import view.utils.PHTextField;
 import view.utils.fonts.SFProFont;
 
 public class AddLibroPanel extends JPanel {
-  PHTextField txtTitulo, txtYear, txtISBN, txtPaginas, txtEdicion;
-  JButton btnAddLibro;
+  private PHTextField txtTitulo, txtYear, txtISBN, txtPaginas, txtEdicion;
+  private JButton btnAddLibro;
 
-  JPanel formContainer, northContainer;
+  private JPanel formContainer, northContainer;
 
-  JComboBox<AutorItem> comboAutores;
+  private JComboBox<AutorItem> comboAutores;
 
   public AddLibroPanel() {
 
@@ -136,7 +136,8 @@ public class AddLibroPanel extends JPanel {
   private void selectAutorComboBox(Autor autorBuscado) {
     for (int i = 0; i < getComboAutores().getItemCount(); i++) {
       AutorItem autorItem = getComboAutores().getItemAt(i);
-      if (autorItem != null && autorItem.getAutor() != null && autorItem.getAutor().equals(autorBuscado)) {
+      if (autorItem != null && autorItem.getAutor() != null
+          && autorItem.getAutor().equals(autorBuscado)) {
         getComboAutores().setSelectedIndex(i);
         break;
       }

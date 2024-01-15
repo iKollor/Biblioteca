@@ -58,6 +58,8 @@ public class CatalogPanel extends JPanel {
     scrollPane = new JScrollPane(gridPanel);
     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+    
   }
 
   public void addComponents() {
@@ -80,6 +82,10 @@ public class CatalogPanel extends JPanel {
 
   public void setLibroCard(List<LibroCard> libroCard) {
     this.libroCard = libroCard;
+  }
+
+  public SearchPanel getSearchPanel() {
+    return searchPanel;
   }
 
 }

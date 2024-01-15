@@ -31,6 +31,7 @@ public class App {
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
         controller.showView(AppController.ViewType.LOGIN);
+        
       }
     });
   }

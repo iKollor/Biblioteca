@@ -29,11 +29,11 @@ public class RegisterController implements ActionListener {
 
   public Usuario getUserFromForm() {
     Usuario user = new Estudiante();
-    user.setNombre(registerView.txtNombre.getText());
-    user.setApellido(registerView.txtApellido.getText());
-    user.setDni(registerView.txtDNI.getText());
-    user.setEmail(registerView.txtEmail.getText());
-    user.setPassword(registerView.txtPassword.getPassword());
+    user.setNombre(registerView.getTxtNombre().getText());
+    user.setApellido(registerView.getTxtApellido().getText());
+    user.setDni(registerView.getTxtDNI().getText());
+    user.setEmail(registerView.getTxtEmail().getText());
+    user.setPassword(registerView.getTxtPassword().getPassword());
     return user;
   }
 
@@ -49,14 +49,15 @@ public class RegisterController implements ActionListener {
           controller.showView(ViewType.LOGIN);
         }
       } catch (SQLIntegrityConstraintViolationException e) {
-        JOptionPane.showMessageDialog(null, "Error al registrar usuario, el DNI o email ya existe", "Error",
-            JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Error al registrar usuario, el DNI o email ya existe",
+            "Error", JOptionPane.ERROR_MESSAGE);
       } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error al registrar usuario, error desconocido", "Error",
-            JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Error al registrar usuario, error desconocido",
+            "Error", JOptionPane.ERROR_MESSAGE);
       }
     } else {
-      JOptionPane.showMessageDialog(null, "Error al registrar usuario, la información no es válida");
+      JOptionPane.showMessageDialog(null,
+          "Error al registrar usuario, la información no es válida");
     }
   }
 

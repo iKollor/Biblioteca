@@ -8,10 +8,10 @@ public class Libro extends ElementoBiblioteca {
   private int edicion;
   private int saldo; // cantidad de copias disponibles
 
-  public Libro() {
-  }
+  public Libro() {}
 
-  public Libro(String titulo, Autor autor, Year anioPublicacion, String ISBN, int paginas, int edicion, int saldo) {
+  public Libro(String titulo, Autor autor, Year anioPublicacion, String ISBN, int paginas,
+      int edicion, int saldo) {
     super(titulo, autor, anioPublicacion);
     this.ISBN = ISBN;
     this.paginas = paginas;

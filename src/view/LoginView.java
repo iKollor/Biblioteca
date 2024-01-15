@@ -68,15 +68,12 @@ public class LoginView extends JFrame {
     setResizable(false);
     setLayout(new GridBagLayout()); // Usamos un GridBagLayout para centrar el panel
 
-    initComponents(); // Se inicializan los componentes
-    addComponents(); // Se agregan los componentes al JFrame
+    initComponents();
+    addComponents();
   }
 
-  // Se separa la inicialización de los componentes de su agregación al panel para
-  // mejorar la legibilidad
   private void initComponents() {
-    lblTitulo = new JLabel("Biblioteca Virtual",
-        SwingConstants.CENTER);
+    lblTitulo = new JLabel("Biblioteca Virtual", SwingConstants.CENTER);
     lblTitulo.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 20));
 
     // Campo de texto para el usuario y contraseña

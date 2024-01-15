@@ -3,6 +3,7 @@ package model;
 import java.time.Year;
 
 public abstract class ElementoBiblioteca {
+  // atributos protegidos para que puedan ser accedidos por las clases hijas
   protected String titulo;
   protected Autor autor;
   protected Year anioPublicacion;
@@ -37,7 +38,6 @@ public abstract class ElementoBiblioteca {
     this.anioPublicacion = anioPublicacion;
   }
 
-  public ElementoBiblioteca() {
-  }
+  public ElementoBiblioteca() {}
 
 }

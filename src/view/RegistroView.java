@@ -17,16 +17,16 @@ import view.utils.fonts.SFProFont;
 
 public class RegistroView extends JFrame {
 
-  public JLabel lblTitulo;
+  private JLabel lblTitulo;
 
-  public JTextField txtNombre;
-  public JTextField txtApellido;
-  public JTextField txtDNI;
-  public JTextField txtEmail;
-  public JPasswordField txtPassword;
-  public JPasswordField txtConfirmPassword;
-  public JButton btnRegistrar;
-  public JButton back;
+  private JTextField txtNombre;
+  private JTextField txtApellido;
+  private JTextField txtDNI;
+  private JTextField txtEmail;
+  private JPasswordField txtPassword;
+  private JPasswordField txtConfirmPassword;
+  private JButton btnRegistrar;
+  private JButton back;
 
   public JTextField getTxtNombre() {
     return txtNombre;
@@ -93,7 +93,8 @@ public class RegistroView extends JFrame {
         "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número, y un carácter especial, sin espacios");
 
     txtConfirmPassword = new JPasswordField();
-    txtConfirmPassword.setToolTipText("Confirmar contraseña, debe coincidir con la contraseña ingresada");
+    txtConfirmPassword
+        .setToolTipText("Confirmar contraseña, debe coincidir con la contraseña ingresada");
 
     btnRegistrar = new JButton("Registrar");
     btnRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

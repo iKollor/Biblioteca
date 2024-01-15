@@ -6,6 +6,7 @@ import model.db.MetodosDAO;
 import view.HomeView;
 import view.LoginView;
 import view.RegistroView;
+import view.utils.Loader;
 
 public class AppController {
 
@@ -73,8 +74,6 @@ public class AppController {
     }
     currentView = viewType;
   }
-
-  // Lógica de Negocio
 
   public LoginView getLoginView() {
     return loginView;

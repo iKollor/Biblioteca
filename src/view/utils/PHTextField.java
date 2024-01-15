@@ -6,6 +6,10 @@ import java.util.Map;
 import javax.swing.*;
 import javax.swing.text.Document;
 
+/*
+ * Este componente tampoco es de mi autoría, lo encontré en StackOverflow y lo modifiqué un poco. Es
+ * un JTextField que muestra un placeholder cuando está vacío.
+ */
 @SuppressWarnings("serial")
 public class PHTextField extends JTextField {
 
@@ -21,25 +25,11 @@ public class PHTextField extends JTextField {
   }
   private static final float FONT_SIZE_RATIO = 0.3f; // Adjust this ratio as needed
 
-  /*
-   * public static void main(final String[] args) {
-   * final PHTextField tf = new PHTextField("");
-   * tf.setColumns(20);
-   * tf.setPlaceholder("All your base are belong to us!");
-   * final Font f = tf.getFont();
-   * tf.setFont(new Font(f.getName(), f.getStyle(), 30));
-   * JOptionPane.showMessageDialog(null, tf);
-   * }
-   */
   private String placeholder;
 
-  public PHTextField() {
-  }
+  public PHTextField() {}
 
-  public PHTextField(
-      final Document pDoc,
-      final String pText,
-      final int pColumns) {
+  public PHTextField(final Document pDoc, final String pText, final int pColumns) {
     super(pDoc, pText, pColumns);
   }
 

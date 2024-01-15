@@ -4,6 +4,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
 
 public class Loader extends JDialog {
@@ -16,6 +17,10 @@ public class Loader extends JDialog {
     setResizable(false);
     setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE); // No hacer nada al cerrar
 
+    init();
+  }
+
+  private void init() {
     // Crear un panel para el mensaje y el icono de carga
     JPanel panel = new JPanel(new BorderLayout());
     JLabel label = new JLabel("Conectando a la base de datos...", JLabel.CENTER);
@@ -35,8 +40,18 @@ public class Loader extends JDialog {
   }
 
   public void mostrarAsync() {
-    new Thread(() -> {
-      this.setVisible(true);
-    }).start();
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        setVisible(true);
+      }
+    });
+  }
+
+  public void ocultarAsync() {
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        setVisible(false);
+      }
+    });
   }
 }

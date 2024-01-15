@@ -9,9 +9,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
+import controller.services.BibliotecaServicio.Estado;
 import model.Libro;
-import model.interfaces.Estado;
 import view.utils.fonts.SFProFont;
 
 public class LibroCard extends JPanel {
@@ -44,9 +43,6 @@ public class LibroCard extends JPanel {
     } else if (estado == Estado.AGOTADO) {
       lblEstado.setForeground(new Color(254, 68, 80));
       lblTituloLibro.setForeground(Color.gray);
-      setBackground(new Color(55, 55, 59));
-    } else if (estado == Estado.PRESTADO) {
-      lblEstado.setForeground(new Color(255, 128, 0));
       setBackground(new Color(55, 55, 59));
     }
 

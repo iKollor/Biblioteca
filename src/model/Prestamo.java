@@ -10,8 +10,8 @@ public class Prestamo {
   private Timestamp fechaDevolucion;
   private boolean devuelto;
 
-  public Prestamo(int id, Libro libro, Usuario usuario, Timestamp fechaPrestamo, Timestamp fechaDevolucion,
-      boolean devuelto) {
+  public Prestamo(int id, Libro libro, Usuario usuario, Timestamp fechaPrestamo,
+      Timestamp fechaDevolucion, boolean devuelto) {
     this.id = id;
     this.libro = libro;
     this.usuario = usuario;
@@ -68,7 +68,6 @@ public class Prestamo {
     this.devuelto = devuelto;
   }
 
-  public Prestamo() {
-  }
+  public Prestamo() {}
 
 }

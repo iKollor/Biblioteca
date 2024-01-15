@@ -11,6 +11,7 @@ import controller.utils.ValidateForm;
 import model.Usuario;
 import model.db.MetodosDAO;
 import view.LoginView;
+import view.utils.Loader;
 
 public class LoginController implements MouseListener {
 
@@ -29,6 +30,11 @@ public class LoginController implements MouseListener {
   }
 
   public void onLogin() {
+
+    Loader loader = new Loader();
+
+    loader.mostrarAsync();
+
     Usuario user = null;
 
     MetodosDAO dao = controller.getDao();
@@ -45,9 +51,9 @@ public class LoginController implements MouseListener {
         user = dao.authLogin(usuario, password);
         System.out.println("Usuario: " + user);
         if (user != null) {
-          JOptionPane.showMessageDialog(null, "Bienvenido " + user.getNombre(), "Bienvenido",
+          JOptionPane.showMessageDialog(null,
+              "Bienvenido " + user.getNombre() + " " + user.getApellido(), "Bienvenido",
               JOptionPane.INFORMATION_MESSAGE);
-
         } else {
           JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error",
               JOptionPane.ERROR_MESSAGE);
@@ -60,12 +66,13 @@ public class LoginController implements MouseListener {
         return;
       }
     } else {
-      JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos, revise los campos", "Error",
-          JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos, revise los campos",
+          "Error", JOptionPane.ERROR_MESSAGE);
       return;
     }
     // Actualizar el estado del usuario en HomeView
     controller.setUser(user);
+    loader.ocultarAsync();
     controller.showView(AppController.ViewType.HOME);
   }
 
@@ -113,8 +120,7 @@ public class LoginController implements MouseListener {
     return new KeyListener() {
 
       @Override
-      public void keyTyped(java.awt.event.KeyEvent e) {
-      }
+      public void keyTyped(java.awt.event.KeyEvent e) {}
 
       @Override
       public void keyPressed(java.awt.event.KeyEvent e) {
@@ -124,8 +130,7 @@ public class LoginController implements MouseListener {
       }
 
       @Override
-      public void keyReleased(java.awt.event.KeyEvent e) {
-      }
+      public void keyReleased(java.awt.event.KeyEvent e) {}
     };
   }
 

@@ -16,10 +16,10 @@ import view.utils.PHTextField;
 import view.utils.fonts.SFProFont;
 
 public class AddAutorPanel extends JPanel {
-  PHTextField txtNombre, txtNacionalidad;
+  private PHTextField txtNombre, txtNacionalidad;
 
-  JPanel formContainer, northContainer;
-  JButton btnAddAutor;
+  private JPanel formContainer, northContainer;
+  private JButton btnAddAutor;
 
   public AddAutorPanel() {
     setLayout(new BorderLayout());

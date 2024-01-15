@@ -11,8 +11,7 @@ public class Autor {
     this.nacionalidad = nacionalidad;
   }
 
-  public Autor() {
-  }
+  public Autor() {}
 
   public int getId() {
     return id;
@@ -38,22 +37,22 @@ public class Autor {
     this.nacionalidad = nacionalidad;
   }
 
-  // El método toString será usado por el JComboBox para obtener el texto que se
-  // muestra
+  // El método toString será usado por el JComboBox para obtener el texto que se muestra
   @Override
   public String toString() {
     return nombre;
   }
 
+  // El método equals será usado por el JComboBox para comparar los objetos
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
       return true;
     if (obj == null || getClass() != obj.getClass())
       return false;
-    Autor autor = (Autor) obj;
+    Autor autorObj = (Autor) obj;
 
-    return id == autor.id;
+    return this.id == autorObj.id;
   }
 
 }

@@ -10,11 +10,17 @@ import model.Libro;
 import model.Prestamo;
 import model.Usuario;
 import model.db.MetodosDAO;
-import model.interfaces.Estado;
 
 public class BibliotecaServicio {
 
   private MetodosDAO dao;
+
+  public enum Estado {
+    DISPONIBLE, // Indica que el libro está disponible para ser prestado
+    AGOTADO, // Indica que el libro no está disponible para ser prestado
+    TODOS // Indica que no se filtrará por estado
+  }
+
 
   public BibliotecaServicio(MetodosDAO dao) {
     this.dao = dao;
@@ -53,7 +59,8 @@ public class BibliotecaServicio {
   public void addLibro(Libro libro) {
     try {
       dao.addLibro(libro);
-      JOptionPane.showMessageDialog(null, "Libro agregado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Libro agregado correctamente", "Éxito",
+          JOptionPane.INFORMATION_MESSAGE);
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error al agregar libro: " + e.getMessage(), "Error",
           JOptionPane.ERROR_MESSAGE);
@@ -83,7 +90,8 @@ public class BibliotecaServicio {
   public void addAutor(Autor autor) {
     try {
       dao.addAutor(autor);
-      JOptionPane.showMessageDialog(null, "Autor agregado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Autor agregado correctamente", "Éxito",
+          JOptionPane.INFORMATION_MESSAGE);
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error al agregar autor: " + e.getMessage(), "Error",
           JOptionPane.ERROR_MESSAGE);
@@ -117,7 +125,8 @@ public class BibliotecaServicio {
       JOptionPane.showMessageDialog(null, "Prestamo agregado correctamente", "Éxito",
           JOptionPane.INFORMATION_MESSAGE);
     } catch (SQLIntegrityConstraintViolationException e) {
-      JOptionPane.showMessageDialog(null, "Ya no hay copias disponibles", "Error", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Ya no hay copias disponibles", "Error",
+          JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error al agregar prestamo: " + e.getMessage(), "Error",
           JOptionPane.ERROR_MESSAGE);
@@ -151,7 +160,8 @@ public class BibliotecaServicio {
   public void addCopia(Libro libro) {
     try {
       dao.addCopia(libro);
-      JOptionPane.showMessageDialog(null, "Copia agregada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Copia agregada correctamente", "Éxito",
+          JOptionPane.INFORMATION_MESSAGE);
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error al agregar copia: " + e.getMessage(), "Error",
           JOptionPane.ERROR_MESSAGE);
@@ -161,10 +171,21 @@ public class BibliotecaServicio {
   public void removeCopia(Libro libro) {
     try {
       dao.removeCopia(libro);
-      JOptionPane.showMessageDialog(null, "Copia eliminada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Copia eliminada correctamente", "Éxito",
+          JOptionPane.INFORMATION_MESSAGE);
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Error al eliminar copia: " + e.getMessage(), "Error",
           JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  public List<Libro> searchLibros(String titulo, String autor, Estado estado) {
+    try {
+      return dao.searchLibros(titulo, autor, estado);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error al buscar libros: " + e.getMessage(), "Error",
+          JOptionPane.ERROR_MESSAGE);
+      return null;
     }
   }
 
