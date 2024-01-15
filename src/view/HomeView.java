@@ -19,7 +19,7 @@ public class HomeView extends JFrame {
 
   public HomeView() {
     setTitle("Sistema de Gestión de Biblioteca");
-    setSize(1000, 700);
+    setSize(1100, 700);
     setMinimumSize(getSize());
     setLocationRelativeTo(null);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -33,7 +33,7 @@ public class HomeView extends JFrame {
 
     lblDefault = new JLabel("<html><center>Seleccione una opción del menú lateral</center></html>",
         JLabel.CENTER);
-    lblDefault.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 22));
+    lblDefault.setFont(new Font(SFProFont.SF_PRO_BOLD, Font.BOLD, 18));
 
     mainPanel = new JPanel(new CardLayout());
     mainPanel.add(lblDefault, "DEFAULT");
