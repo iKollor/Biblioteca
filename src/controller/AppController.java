@@ -21,7 +21,7 @@ public class AppController {
   // Modelos
   private MetodosDAO dao; // DAO: Data Access Object
 
-  private ValidateForm validate = new ValidateForm(); // Validador de formularios
+  private ValidateForm validate; // Validador de formularios
   private Usuario user = null; // Usuario actual
 
   private ViewType currentView = null;
@@ -33,6 +33,8 @@ public class AppController {
   // Constructor
   public AppController(MetodosDAO dao) {
     this.dao = dao;
+
+    this.validate = new ValidateForm();
   }
 
   public void showView(ViewType viewType) {

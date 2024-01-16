@@ -61,7 +61,6 @@ public class MetodosDAO {
     try (Connection cn = Conexion.Conectar();
         PreparedStatement pst =
             cn.prepareStatement("SELECT * FROM usuarios WHERE email = ? AND password = ?")) {
-
       pst.setString(1, email);
       pst.setString(2, password);
       ResultSet rs = pst.executeQuery();
