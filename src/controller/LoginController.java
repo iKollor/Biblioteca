@@ -11,7 +11,6 @@ import controller.utils.ValidateForm;
 import model.Usuario;
 import model.db.MetodosDAO;
 import view.LoginView;
-import view.utils.Loader;
 
 public class LoginController implements MouseListener {
 
@@ -30,10 +29,6 @@ public class LoginController implements MouseListener {
   }
 
   public void onLogin() {
-
-    Loader loader = new Loader();
-
-    loader.mostrarAsync();
 
     Usuario user = null;
 
@@ -72,7 +67,6 @@ public class LoginController implements MouseListener {
     }
     // Actualizar el estado del usuario en HomeView
     controller.setUser(user);
-    loader.ocultarAsync();
     controller.showView(AppController.ViewType.HOME);
   }
 
